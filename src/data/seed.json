@@ -18,7 +18,7 @@
       "position": { "x": 1040, "y": -180 },
       "data": {
         "title": "2023",
-        "kind": "Year",
+        "kind": "Collection",
         "note": "A year of memories.",
         "date": "2023",
         "place": "",
@@ -31,7 +31,7 @@
       "position": { "x": 1120, "y": 90 },
       "data": {
         "title": "2024",
-        "kind": "Year",
+        "kind": "Collection",
         "note": "A year of memories.",
         "date": "2024",
         "place": "",
@@ -44,7 +44,7 @@
       "position": { "x": 1120, "y": 630 },
       "data": {
         "title": "2025",
-        "kind": "Year",
+        "kind": "Collection",
         "note": "A year of memories.",
         "date": "2025",
         "place": "",
@@ -57,7 +57,7 @@
       "position": { "x": 1040, "y": 360 },
       "data": {
         "title": "2026",
-        "kind": "Year",
+        "kind": "Collection",
         "note": "A year of memories.",
         "date": "2026",
         "place": "",
@@ -70,7 +70,7 @@
       "position": { "x": 1040, "y": 900 },
       "data": {
         "title": "2027",
-        "kind": "Year",
+        "kind": "Collection",
         "note": "A year of memories.",
         "date": "2027",
         "place": "",
@@ -167,7 +167,7 @@
     { "id": "e-life-travel", "source": "life", "target": "travel", "branch": "blue" },
     { "id": "e-life-photo-job-1", "source": "life", "target": "photo-job-1", "branch": "rose" },
     { "id": "e-2026-jan", "source": "2026", "target": "jan", "branch": "blue" },
-    { "id": "e-2026-mountains", "source": "2026", "target": "mountains", "branch": "gold" },
+    { "id": "e-jan-mountains", "source": "jan", "target": "mountains", "branch": "gold" },
     { "id": "e-jan-new-year-dinner", "source": "jan", "target": "new-year-dinner", "branch": "green" }
   ]
 }

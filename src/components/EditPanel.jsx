@@ -1,7 +1,7 @@
 import React from 'react';
 import { X, Upload, Trash2 } from 'lucide-react';
 
-export default function EditPanel({ node, onClose, onPatch, onDelete, onFiles, parentId, parentOptions = [], onMove }) {
+export default function EditPanel({ node, onClose, onPatch, onDelete, onFiles, parentId, parentOptions = [], onMove, onCreate }) {
   if (!node) return null;
   const d = node.data;
   const isDraft = !!d.isDraft;
@@ -22,14 +22,12 @@ export default function EditPanel({ node, onClose, onPatch, onDelete, onFiles, p
           <label className="field">
             <span>What are you adding?</span>
             <select value={d.kind || 'Album'} onChange={e => onPatch({ kind: e.target.value })}>
+              <option>Collection</option>
               <option>Album</option>
-              <option>Year</option>
-              <option>Month</option>
               <option>Event</option>
               <option>Person</option>
               <option>Period</option>
-              <option>Collection</option>
-              <option>Root</option>
+              {!isDraft && <option>Root</option>}
             </select>
           </label>
 
@@ -48,7 +46,7 @@ export default function EditPanel({ node, onClose, onPatch, onDelete, onFiles, p
 
           <label className="field">
             <span>Name it</span>
-            <input value={d.title || ''} onChange={e => onPatch({ title: e.target.value })}/>
+            <input value={d.title || ''} onChange={e => onPatch({ title: e.target.value })} placeholder="Example: January, Family, Photo job 1"/>
           </label>
         </section>
 
@@ -56,13 +54,13 @@ export default function EditPanel({ node, onClose, onPatch, onDelete, onFiles, p
           <div className="section-label">Details</div>
           <label className="field">
             <span>Story</span>
-            <textarea rows="4" value={d.note || ''} onChange={e => onPatch({ note: e.target.value })}/>
+            <textarea rows="4" value={d.note || ''} onChange={e => onPatch({ note: e.target.value })} placeholder="Add your story now or later."/>
           </label>
 
           <div className="field-grid">
             <label className="field">
               <span>Date</span>
-              <input value={d.date || ''} onChange={e => onPatch({ date: e.target.value })} placeholder="Jan 2026"/>
+              <input type="date" value={d.date || ''} onChange={e => onPatch({ date: e.target.value })}/>
             </label>
             <label className="field">
               <span>Visibility</span>
@@ -74,18 +72,22 @@ export default function EditPanel({ node, onClose, onPatch, onDelete, onFiles, p
           </div>
         </section>
 
-        <label className="upload-button">
-          <Upload size={16}/>
-          Add images
-          <input type="file" accept="image/*" multiple onChange={e => onFiles(e.target.files)}/>
-        </label>
+        {!isDraft && (
+          <label className="upload-button">
+            <Upload size={16}/>
+            Add images
+            <input type="file" accept="image/*" multiple onChange={e => onFiles(e.target.files)}/>
+          </label>
+        )}
 
-        <button className="delete-button" onClick={onDelete}>
-          <Trash2 size={15}/>Delete branch
-        </button>
+        {!isDraft && (
+          <button className="delete-button" onClick={onDelete}>
+            <Trash2 size={15}/>Delete branch
+          </button>
+        )}
 
         {isDraft && (
-          <button className="done-button" onClick={() => onPatch({ isDraft: false })}>
+          <button className="done-button" onClick={onCreate}>
             Create branch
           </button>
         )}

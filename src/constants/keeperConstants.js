@@ -4,7 +4,7 @@ export const STORAGE_KEY = 'keeper-tree-v1';
 export const LEGACY_STORAGE_KEY = 'minnesboard-tree-v1';
 
 export const BRANCH_COLORS = ['green', 'gold', 'blue', 'rose'];
-export const BRANCH_TYPES = ['Year', 'Month', 'Album', 'Event', 'Person', 'Collection'];
+export const BRANCH_TYPES = ['Collection', 'Album', 'Event', 'Person'];
 
 export const PEOPLE = ['Nathalie', 'Klara', 'Mom', 'Grandma', 'Friends'];
 export const TAGS_INDEX = ['family', 'winter', 'travel', 'client work', 'favorites', 'legacy'];

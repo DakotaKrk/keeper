@@ -37,12 +37,14 @@ export default function App() {
   const [boardLayoutMode, setBoardLayoutMode] = useState('tree');
   const [editOpen, setEditOpen] = useState(false);
   const [addMenuOpen, setAddMenuOpen] = useState(false);
+  const [draftBranch, setDraftBranch] = useState(null);
   const [query, setQuery] = useState('');
   const [rf, setRf] = useState(null);
   const fileRef = useRef(null);
 
   const nodeTypes = useMemo(() => ({ memory: MemoryNode }), []);
   const selected = nodes.find(n => n.id === selectedId) || null;
+  const editingNode = draftBranch || selected;
   const activeFolder = activeFolderId ? nodes.find(n => n.id === activeFolderId) : null;
 
   const childIds = useMemo(() => {
@@ -113,8 +115,10 @@ export default function App() {
     () => edges.find(edge => edge.target === selectedId)?.source || '',
     [edges, selectedId]
   );
+  const draftParentId = draftBranch?.parentId || activeFolderId || selectedId || 'life';
   const parentOptions = useMemo(() => {
-    if (!selectedId) return nodes;
+    const activeId = draftBranch ? null : selectedId;
+    if (!activeId) return nodes;
 
     const descendants = new Set();
     const visit = (id) => {
@@ -123,10 +127,10 @@ export default function App() {
         visit(childId);
       });
     };
-    visit(selectedId);
+    visit(activeId);
 
-    return nodes.filter(node => node.id !== selectedId && !descendants.has(node.id));
-  }, [childIds, nodes, selectedId]);
+    return nodes.filter(node => node.id !== activeId && !descendants.has(node.id));
+  }, [childIds, draftBranch, nodes, selectedId]);
 
   const persist = useCallback((nextNodes, nextEdges = edges) => {
     writeKeeperState(nextNodes, nextEdges);
@@ -179,6 +183,15 @@ export default function App() {
   }, [nodes, persist, setEdges]);
 
   function patchSelected(patch) {
+    if (draftBranch) {
+      setDraftBranch(current => ({
+        ...current,
+        data: { ...current.data, ...patch },
+        parentId: patch.parentId || current.parentId
+      }));
+      return;
+    }
+
     setNodes(current => {
       const next = current.map(n =>
         n.id === selectedId ? { ...n, data: { ...n.data, ...patch } } : n
@@ -189,6 +202,11 @@ export default function App() {
   }
 
   function moveSelectedToBoard(parentId) {
+    if (draftBranch) {
+      setDraftBranch(current => ({ ...current, parentId }));
+      return;
+    }
+
     if (!selectedId || !parentId || selectedId === 'life') return;
 
     setEdges(current => {
@@ -205,8 +223,32 @@ export default function App() {
     });
   }
 
-  function addBranch(kind = 'Album') {
+  function addBranch(kind = 'Collection') {
     const parentId = selectedId || activeFolderId || 'life';
+    setDraftBranch({
+      id: 'draft-branch',
+      type: 'memory',
+      position: { x: 0, y: 0 },
+      parentId,
+      data: {
+        title: '',
+        kind,
+        note: '',
+        date: '',
+        place: '',
+        visibility: 'private',
+        images: [],
+        isDraft: true
+      }
+    });
+    setSelectedId(null);
+    setEditOpen(true);
+    setAddMenuOpen(false);
+  }
+
+  function createDraftBranch() {
+    if (!draftBranch) return;
+    const parentId = draftBranch.parentId || activeFolderId || 'life';
     const parentNode = visibleNodes.find(n => n.id === parentId) || nodes.find(n => n.id === parentId);
     const siblingCount = childIds.get(parentId)?.length || 0;
     let position = nextBranchPosition(parentNode, siblingCount);
@@ -224,14 +266,10 @@ export default function App() {
       type: 'memory',
       position,
       data: {
-        title: `New ${kind.toLowerCase()}`,
-        kind,
-        note: '',
-        date: '',
-        place: '',
-        visibility: 'private',
+        ...draftBranch.data,
+        title: draftBranch.data.title?.trim() || `Untitled ${draftBranch.data.kind.toLowerCase()}`,
         images: [],
-        isDraft: true
+        isDraft: false
       }
     };
 
@@ -256,8 +294,8 @@ export default function App() {
     }
 
     setSelectedId(id);
-    setEditOpen(true);
-    setAddMenuOpen(false);
+    setDraftBranch(null);
+    setEditOpen(false);
   }
 
   function openFolder(id = selectedId) {
@@ -265,6 +303,7 @@ export default function App() {
     if (!node) return;
     setActiveFolderId(id);
     setSelectedId(null);
+    setDraftBranch(null);
     setEditOpen(false);
     resetBoardCamera(rf);
   }
@@ -272,6 +311,7 @@ export default function App() {
   function closeFolder() {
     setActiveFolderId(null);
     setSelectedId(null);
+    setDraftBranch(null);
     setEditOpen(false);
     resetBoardCamera(rf);
   }
@@ -306,6 +346,7 @@ export default function App() {
     });
 
     setSelectedId(null);
+    setDraftBranch(null);
     setEditOpen(false);
   }
 
@@ -346,6 +387,7 @@ export default function App() {
         activeView={activeView}
         onChangeView={(view) => {
           setActiveView(view);
+          setDraftBranch(null);
           setEditOpen(false);
         }}
       />
@@ -384,22 +426,28 @@ export default function App() {
               setSelectedId(node.id);
               setEditOpen(false);
             }}
-            onPaneClick={() => setEditOpen(false)}
+            onPaneClick={() => {
+              setDraftBranch(null);
+              setEditOpen(false);
+            }}
             onInit={setRf}
             activeFolder={activeFolder}
             closeFolder={closeFolder}
             selected={selected}
+            editingNode={editingNode}
             editOpen={editOpen}
             setSelectedId={setSelectedId}
             setEditOpen={setEditOpen}
+            setDraftBranch={setDraftBranch}
             fileRef={fileRef}
             addImages={addImages}
             patchSelected={patchSelected}
+            createDraftBranch={createDraftBranch}
             openFolder={openFolder}
             canOpenSelected={canOpenSelected}
             selectedChildren={selectedChildren}
             deleteSelected={deleteSelected}
-            selectedParentId={selectedParentId}
+            selectedParentId={draftBranch ? draftParentId : selectedParentId}
             parentOptions={parentOptions}
             moveSelectedToBoard={moveSelectedToBoard}
             styleProps={{

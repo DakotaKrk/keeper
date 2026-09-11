@@ -44,12 +44,15 @@ export default function BoardView({
   activeFolder,
   closeFolder,
   selected,
+  editingNode,
   editOpen,
   setSelectedId,
   setEditOpen,
+  setDraftBranch,
   fileRef,
   addImages,
   patchSelected,
+  createDraftBranch,
   openFolder,
   canOpenSelected,
   selectedChildren,
@@ -145,6 +148,23 @@ export default function BoardView({
           parentId={selectedParentId}
           parentOptions={parentOptions}
           onMove={moveSelectedToBoard}
+        />
+      )}
+
+      {editOpen && editingNode?.data?.isDraft && (
+        <EditPanel
+          node={editingNode}
+          onClose={() => {
+            setDraftBranch(null);
+            setEditOpen(false);
+          }}
+          onPatch={patchSelected}
+          onDelete={deleteSelected}
+          onFiles={addImages}
+          parentId={selectedParentId}
+          parentOptions={parentOptions}
+          onMove={moveSelectedToBoard}
+          onCreate={createDraftBranch}
         />
       )}
     </>
