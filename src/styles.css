@@ -478,8 +478,20 @@ button { cursor: pointer; }
   color: #fbfaf7;
   box-shadow: 0 24px 64px rgba(38,36,31,.18);
 }
+.memory-node.board-core-node.core-color-sage {
+  background: #55614f;
+}
+.memory-node.board-core-node.core-color-gold {
+  background: #8a7447;
+}
 .memory-node.board-core-node .node-cover {
   background: #34342e;
+}
+.memory-node.board-core-node.core-color-sage .node-cover {
+  background: #65715c;
+}
+.memory-node.board-core-node.core-color-gold .node-cover {
+  background: #9a8352;
 }
 .memory-node.board-core-node .cover-placeholder {
   color: rgba(255,255,253,.58);
@@ -488,6 +500,24 @@ button { cursor: pointer; }
     linear-gradient(90deg, rgba(255,255,253,.045) 1px, transparent 1px),
     linear-gradient(135deg, #35352f, #25251f);
   background-size: 18px 18px, 18px 18px, auto;
+}
+.memory-node.board-core-node.core-color-sage .cover-placeholder {
+  background:
+    linear-gradient(rgba(255,255,253,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,253,.045) 1px, transparent 1px),
+    linear-gradient(135deg, #65715c, #465140);
+  background-size: 18px 18px, 18px 18px, auto;
+}
+.memory-node.board-core-node.core-color-gold .cover-placeholder {
+  background:
+    linear-gradient(rgba(255,255,253,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,253,.045) 1px, transparent 1px),
+    linear-gradient(135deg, #9a8352, #725d36);
+  background-size: 18px 18px, 18px 18px, auto;
+}
+.core-symbol {
+  position: relative;
+  z-index: 1;
 }
 .memory-node.board-core-node .node-title,
 .memory-node.board-core-node .node-note,

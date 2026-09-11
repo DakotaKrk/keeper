@@ -200,6 +200,8 @@ export default function App() {
   const [activeView, setActiveView] = useState('board');
   const [branchTheme, setBranchTheme] = useState('tree');
   const [nodeShape, setNodeShape] = useState('soft');
+  const [coreSymbol, setCoreSymbol] = useState('leaf');
+  const [coreColor, setCoreColor] = useState('dark');
   const [editOpen, setEditOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [rf, setRf] = useState(null);
@@ -244,10 +246,12 @@ export default function App() {
       ...node,
       data: {
         ...node.data,
-        isBoardCore: activeFolderId ? node.id === activeFolderId : node.id === 'life'
+        isBoardCore: activeFolderId ? node.id === activeFolderId : node.id === 'life',
+        coreSymbol,
+        coreColor
       }
     })),
-    [activeFolderId, childIds, nodes, visibleIds]
+    [activeFolderId, childIds, coreColor, coreSymbol, nodes, visibleIds]
   );
 
   const visibleEdges = useMemo(
@@ -684,6 +688,34 @@ export default function App() {
           </Panel>
 
           <Panel position="top-right" className="style-panel">
+            <div>
+              <span>Core symbol</span>
+              <div className="segmented-control">
+                {['leaf', 'flower', 'star'].map(symbol => (
+                  <button
+                    key={symbol}
+                    className={coreSymbol === symbol ? 'is-active' : ''}
+                    onClick={() => setCoreSymbol(symbol)}
+                  >
+                    {symbol}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div>
+              <span>Core color</span>
+              <div className="segmented-control">
+                {['dark', 'sage', 'gold'].map(color => (
+                  <button
+                    key={color}
+                    className={coreColor === color ? 'is-active' : ''}
+                    onClick={() => setCoreColor(color)}
+                  >
+                    {color}
+                  </button>
+                ))}
+              </div>
+            </div>
             <div>
               <span>Branch theme</span>
               <div className="segmented-control">
