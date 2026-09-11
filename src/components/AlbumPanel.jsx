@@ -1,5 +1,5 @@
 import React from 'react';
-import { Camera, FolderOpen, X, Pencil, Printer, ImagePlus, CalendarDays, MapPin, MoreHorizontal, Share2, Tags, UserRound } from 'lucide-react';
+import { Camera, FolderOpen, X, Pencil, Printer, ImagePlus, CalendarDays, MapPin, MoreHorizontal, Tags, UserRound } from 'lucide-react';
 
 export default function AlbumPanel({ node, onClose, onEdit, onAddImages, onOpenFolder, canOpen, isOpen }) {
   if (!node) return null;
@@ -45,8 +45,8 @@ export default function AlbumPanel({ node, onClose, onEdit, onAddImages, onOpenF
 
         <div className="album-tabs">
           <button className="is-active"><ImagePlus size={14}/>Images</button>
-          <button><MapPin size={14}/>Map</button>
           <button><UserRound size={14}/>People</button>
+          <button><Tags size={14}/>Tags</button>
           <button><Pencil size={14}/>Notes</button>
         </div>
 
@@ -86,11 +86,6 @@ export default function AlbumPanel({ node, onClose, onEdit, onAddImages, onOpenF
           </section>
 
           <aside className="album-aside">
-            <div className="info-card">
-              <strong><MapPin size={14}/>Places</strong>
-              <div className="mini-map">{d.place || 'No place yet'}</div>
-            </div>
-
             <div className="info-card">
               <strong><Tags size={14}/>Tags</strong>
               <div className="tag-list">

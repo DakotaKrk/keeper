@@ -509,7 +509,7 @@ button { cursor: pointer; }
 
 .album-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) clamp(190px, 18vw, 260px);
+  grid-template-columns: minmax(0, 1fr) clamp(210px, 18vw, 270px);
   gap: clamp(14px, 1.8vw, 26px);
   margin-top: clamp(16px, 2vw, 24px);
   align-items: start;
@@ -642,10 +642,10 @@ button { cursor: pointer; }
 
 .album-aside {
   display: grid;
-  gap: 10px;
+  gap: 12px;
 }
 .info-card {
-  padding: 13px;
+  padding: 14px;
   border: 1px solid rgba(37,36,31,.08);
   border-radius: 12px;
   background: #fbfaf7;
@@ -823,7 +823,7 @@ button { cursor: pointer; }
     grid-template-columns: 1fr;
   }
   .album-aside {
-    grid-template-columns: repeat(4, minmax(150px, 1fr));
+    grid-template-columns: repeat(3, minmax(160px, 1fr));
     overflow-x: auto;
     padding-bottom: 4px;
   }
