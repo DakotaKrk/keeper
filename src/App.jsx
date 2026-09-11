@@ -138,7 +138,7 @@ export default function App() {
     }))
   );
 
-  const [selectedId, setSelectedId] = useState('life');
+  const [selectedId, setSelectedId] = useState(null);
   const [activeFolderId, setActiveFolderId] = useState(null);
   const [activeView, setActiveView] = useState('board');
   const [branchTheme, setBranchTheme] = useState('tree');
@@ -286,11 +286,12 @@ export default function App() {
       return next;
     });
 
-    if (selectedId) {
+    const parentId = selectedId || activeFolderId || 'life';
+    if (parentId) {
       setEdges(current => {
         const next = addEdge({
           id: uid('edge'),
-          source: selectedId,
+          source: parentId,
           target: id,
           type: 'organic',
           data: { branch: 'green' }
@@ -319,7 +320,7 @@ export default function App() {
 
   function closeFolder() {
     setActiveFolderId(null);
-    setSelectedId('life');
+    setSelectedId(null);
     setEditOpen(false);
     requestAnimationFrame(() => rf?.fitView({ duration: 450, padding: 0.24 }));
   }
@@ -577,6 +578,11 @@ export default function App() {
           onConnect={onConnect}
           onEdgeClick={onEdgeClick}
           onNodeClick={(_, node) => {
+            if (node.id === 'life') {
+              setSelectedId(null);
+              setEditOpen(false);
+              return;
+            }
             if ((childIds.get(node.id) || []).length) {
               openFolder(node.id);
               return;
