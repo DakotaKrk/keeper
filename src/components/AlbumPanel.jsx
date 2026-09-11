@@ -14,6 +14,7 @@ const mountainDemoImages = [
 
 export default function AlbumPanel({ node, onClose, onEdit, onAddImages, onOpenFolder, canOpen, isOpen }) {
   const [albumView, setAlbumView] = useState('polaroid');
+  const [panelSize, setPanelSize] = useState('half');
   if (!node) return null;
   const d = node.data;
   const ownImages = d.images || [];
@@ -40,10 +41,14 @@ export default function AlbumPanel({ node, onClose, onEdit, onAddImages, onOpenF
   ];
 
   return (
-    <aside className="detail-panel album-experience">
+    <aside className={`detail-panel album-experience album-size-${panelSize}`}>
       <div className={`album-cover ${cover ? 'has-cover' : ''}`}>
         {cover && <img src={cover} alt="" />}
         <button className="album-back" onClick={onClose}><ArrowLeft size={15}/>Back to board</button>
+        <div className="album-size-switch">
+          <button className={panelSize === 'half' ? 'is-active' : ''} onClick={() => setPanelSize('half')}>Half</button>
+          <button className={panelSize === 'full' ? 'is-active' : ''} onClick={() => setPanelSize('full')}>Full</button>
+        </div>
         <button className="icon-button album-close" onClick={onClose}><X size={18}/></button>
         <button className="cover-edit"><Pencil size={13}/>Edit cover</button>
         <div className="album-cover-title">

@@ -532,11 +532,17 @@ button { cursor: pointer; }
   animation: panelRise .26s ease both;
 }
 .detail-panel.album-experience {
-  left: clamp(18px, 2vw, 28px);
   right: clamp(18px, 2vw, 28px);
   width: auto;
   border-radius: 14px;
   background: rgba(255,255,253,.97);
+}
+.detail-panel.album-experience.album-size-half {
+  left: auto;
+  width: clamp(560px, 56vw, 920px);
+}
+.detail-panel.album-experience.album-size-full {
+  left: clamp(18px, 2vw, 28px);
 }
 .edit-panel { right: min(932px, calc(100vw - 96px)); width: min(360px, calc(100vw - 118px)); }
 
@@ -628,6 +634,34 @@ button { cursor: pointer; }
   font-size: 12px;
   font-weight: 650;
 }
+.album-size-switch {
+  position: absolute;
+  z-index: 3;
+  top: 18px;
+  right: 68px;
+  display: inline-flex;
+  gap: 4px;
+  padding: 3px;
+  border: 1px solid rgba(255,255,253,.32);
+  border-radius: 8px;
+  background: rgba(255,255,253,.5);
+  backdrop-filter: blur(12px);
+}
+.album-size-switch button {
+  min-height: 28px;
+  border: 0;
+  border-radius: 6px;
+  padding: 0 10px;
+  background: transparent;
+  color: #3d3a34;
+  font-size: 11px;
+  font-weight: 650;
+}
+.album-size-switch button.is-active {
+  background: #fffefa;
+  color: #22231f;
+  box-shadow: 0 3px 12px rgba(38,36,31,.09);
+}
 .album-close {
   position: absolute;
   z-index: 2;
@@ -647,6 +681,17 @@ button { cursor: pointer; }
   max-width: 1280px;
   margin-left: auto;
   margin-right: auto;
+}
+.album-size-half .album-layout {
+  grid-template-columns: 1fr;
+}
+.album-size-half .album-aside {
+  grid-template-columns: repeat(3, minmax(160px, 1fr));
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+.album-size-half .album-cover-title {
+  right: 110px;
 }
 .album-experience .album-tabs,
 .album-experience .asset-tabs,
@@ -960,6 +1005,9 @@ button { cursor: pointer; }
 .album-experience .polaroid-gallery {
   grid-template-columns: repeat(4, minmax(150px, 1fr));
 }
+.album-size-half .polaroid-gallery {
+  grid-template-columns: repeat(3, minmax(140px, 1fr));
+}
 .polaroid-photo {
   border: 0;
   border-radius: 4px;
@@ -1214,6 +1262,16 @@ button { cursor: pointer; }
   }
   .detail-panel, .edit-panel {
     top: auto; left: 8px; right: 8px; bottom: 8px; width: auto; height: 68vh;
+  }
+  .detail-panel.album-experience,
+  .detail-panel.album-experience.album-size-half,
+  .detail-panel.album-experience.album-size-full {
+    left: 8px;
+    right: 8px;
+    width: auto;
+  }
+  .album-size-switch {
+    right: 56px;
   }
   .detail-scroll { height: calc(100% - 160px); padding: 18px; }
   .album-cover { height: 160px; }
