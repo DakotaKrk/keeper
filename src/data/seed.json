@@ -1,0 +1,176 @@
+{
+  "nodes": [
+    {
+      "id": "life",
+      "position": {
+        "x": 520,
+        "y": 300
+      },
+      "data": {
+        "title": "My life",
+        "kind": "Root",
+        "note": "Every memory belongs somewhere.",
+        "date": "",
+        "place": "",
+        "visibility": "private",
+        "images": []
+      }
+    },
+    {
+      "id": "family",
+      "position": {
+        "x": 520,
+        "y": 20
+      },
+      "data": {
+        "title": "Family",
+        "kind": "Collection",
+        "note": "The people I want to remember.",
+        "date": "",
+        "place": "",
+        "visibility": "shared",
+        "images": []
+      }
+    },
+    {
+      "id": "grandma",
+      "position": {
+        "x": 120,
+        "y": 30
+      },
+      "data": {
+        "title": "The best years with grandma",
+        "kind": "Period",
+        "note": "Not perfect photos. Important memories.",
+        "date": "2018-2024",
+        "place": "",
+        "visibility": "private",
+        "images": []
+      }
+    },
+    {
+      "id": "2026",
+      "position": {
+        "x": 900,
+        "y": 60
+      },
+      "data": {
+        "title": "2026",
+        "kind": "Year",
+        "note": "A year of memories.",
+        "date": "2026",
+        "place": "",
+        "visibility": "private",
+        "images": []
+      }
+    },
+    {
+      "id": "mountains",
+      "position": {
+        "x": 980,
+        "y": 320
+      },
+      "data": {
+        "title": "The mountains",
+        "kind": "Period",
+        "note": "Snow, quiet and time together.",
+        "date": "Jan 2026",
+        "place": "Aspen",
+        "visibility": "private",
+        "images": []
+      }
+    },
+    {
+      "id": "jan",
+      "position": {
+        "x": 900,
+        "y": 620
+      },
+      "data": {
+        "title": "January",
+        "kind": "Month",
+        "note": "Winter, daily life and small moments.",
+        "date": "2026-01",
+        "place": "",
+        "visibility": "private",
+        "images": []
+      }
+    },
+    {
+      "id": "summer",
+      "position": {
+        "x": 160,
+        "y": 570
+      },
+      "data": {
+        "title": "Summer",
+        "kind": "Album",
+        "note": "Long days. Big memories.",
+        "date": "",
+        "place": "",
+        "visibility": "shared",
+        "images": []
+      }
+    },
+    {
+      "id": "travel",
+      "position": {
+        "x": 70,
+        "y": 320
+      },
+      "data": {
+        "title": "Travel",
+        "kind": "Collection",
+        "note": "Places that changed us.",
+        "date": "",
+        "place": "",
+        "visibility": "shared",
+        "images": []
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-life-family",
+      "source": "life",
+      "target": "family",
+      "branch": "green"
+    },
+    {
+      "id": "e-family-grandma",
+      "source": "family",
+      "target": "grandma",
+      "branch": "green"
+    },
+    {
+      "id": "e-life-2026",
+      "source": "life",
+      "target": "2026",
+      "branch": "gold"
+    },
+    {
+      "id": "e-2026-mountains",
+      "source": "2026",
+      "target": "mountains",
+      "branch": "gold"
+    },
+    {
+      "id": "e-2026-jan",
+      "source": "2026",
+      "target": "jan",
+      "branch": "blue"
+    },
+    {
+      "id": "e-life-summer",
+      "source": "life",
+      "target": "summer",
+      "branch": "green"
+    },
+    {
+      "id": "e-life-travel",
+      "source": "life",
+      "target": "travel",
+      "branch": "blue"
+    }
+  ]
+}
