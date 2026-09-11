@@ -240,7 +240,13 @@ export default function App() {
       nodes.filter(node => visibleIds.has(node.id)),
       childIds,
       activeFolderId
-    ),
+    ).map(node => ({
+      ...node,
+      data: {
+        ...node.data,
+        isBoardCore: activeFolderId ? node.id === activeFolderId : node.id === 'life'
+      }
+    })),
     [activeFolderId, childIds, nodes, visibleIds]
   );
 

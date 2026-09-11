@@ -472,6 +472,32 @@ button { cursor: pointer; }
   background: rgba(255,255,253,.98);
   box-shadow: 0 22px 56px rgba(38,36,31,.13);
 }
+.memory-node.board-core-node {
+  border-color: rgba(35,35,31,.2);
+  background: #2a2a25;
+  color: #fbfaf7;
+  box-shadow: 0 24px 64px rgba(38,36,31,.18);
+}
+.memory-node.board-core-node .node-cover {
+  background: #34342e;
+}
+.memory-node.board-core-node .cover-placeholder {
+  color: rgba(255,255,253,.58);
+  background:
+    linear-gradient(rgba(255,255,253,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,253,.045) 1px, transparent 1px),
+    linear-gradient(135deg, #35352f, #25251f);
+  background-size: 18px 18px, 18px 18px, auto;
+}
+.memory-node.board-core-node .node-title,
+.memory-node.board-core-node .node-note,
+.memory-node.board-core-node .node-meta {
+  color: #fbfaf7;
+}
+.memory-node.board-core-node .node-note,
+.memory-node.board-core-node .node-meta {
+  opacity: .72;
+}
 .memory-node.life-node .node-title { font-size: 29px; }
 .memory-node.life-node .node-note { font-size: 12px; }
 .memory-node.life-node .node-cover { height: 138px; border-radius: 0; }

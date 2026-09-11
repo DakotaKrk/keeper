@@ -8,7 +8,7 @@ function MemoryNode({ data, selected }) {
   const kindClass = `kind-${(data.kind || 'album').toLowerCase().replace(/\s+/g, '-')}`;
 
   return (
-    <div className={`memory-node ${kindClass} ${isLife ? 'life-node' : ''} ${selected ? 'is-selected' : ''}`}>
+    <div className={`memory-node ${kindClass} ${isLife ? 'life-node' : ''} ${data.isBoardCore ? 'board-core-node' : ''} ${selected ? 'is-selected' : ''}`}>
       <Handle id="top" type="target" position={Position.Top} className="node-handle" />
       <Handle id="right" type="target" position={Position.Right} className="node-handle" />
       <Handle id="bottom" type="target" position={Position.Bottom} className="node-handle" />
