@@ -69,7 +69,7 @@ export default function AlbumPanel({ node, onClose, onEdit, onAddImages, onOpenF
           <button className={panelSize === 'full' ? 'is-active' : ''} onClick={() => setPanelSize('full')}>Full</button>
         </div>
         <button className="icon-button album-close" onClick={onClose}><X size={18}/></button>
-        <button className="cover-edit"><Pencil size={13}/>Edit cover</button>
+        <button className="cover-edit" onClick={onAddImages}><Pencil size={13}/>Edit cover</button>
         <div className="album-cover-title">
           <div className="detail-kicker">{d.kind}</div>
           <h2>{d.title}{d.date ? ` — ${d.date}` : ''}</h2>

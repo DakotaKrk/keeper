@@ -795,7 +795,7 @@ export default function App() {
         </div>
 
         <AlbumPanel
-          node={selected}
+          node={editOpen ? null : selected}
           onClose={() => setSelectedId(null)}
           onEdit={() => setEditOpen(true)}
           onAddImages={() => fileRef.current?.click()}
