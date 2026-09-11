@@ -286,6 +286,24 @@ export default function App() {
       .filter(Boolean),
     [childIds, nodes, selectedId]
   );
+  const selectedParentId = useMemo(
+    () => edges.find(edge => edge.target === selectedId)?.source || '',
+    [edges, selectedId]
+  );
+  const parentOptions = useMemo(() => {
+    if (!selectedId) return nodes;
+
+    const descendants = new Set();
+    const visit = (id) => {
+      (childIds.get(id) || []).forEach(childId => {
+        descendants.add(childId);
+        visit(childId);
+      });
+    };
+    visit(selectedId);
+
+    return nodes.filter(node => node.id !== selectedId && !descendants.has(node.id));
+  }, [childIds, nodes, selectedId]);
 
   const persist = useCallback((nextNodes, nextEdges = edges) => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({
@@ -341,6 +359,23 @@ export default function App() {
         n.id === selectedId ? { ...n, data: { ...n.data, ...patch } } : n
       );
       persist(next);
+      return next;
+    });
+  }
+
+  function moveSelectedToBoard(parentId) {
+    if (!selectedId || !parentId || selectedId === 'life') return;
+
+    setEdges(current => {
+      const keptEdges = current.filter(edge => edge.target !== selectedId);
+      const next = addEdge({
+        id: uid('edge'),
+        source: parentId,
+        target: selectedId,
+        type: 'organic',
+        data: { branch: 'green' }
+      }, keptEdges);
+      persist(nodes, next);
       return next;
     });
   }
@@ -448,7 +483,7 @@ export default function App() {
       return nextEdges;
     });
 
-    setSelectedId('life');
+    setSelectedId(null);
     setEditOpen(false);
   }
 
@@ -824,6 +859,9 @@ export default function App() {
             onPatch={patchSelected}
             onDelete={deleteSelected}
             onFiles={addImages}
+            parentId={selectedParentId}
+            parentOptions={parentOptions}
+            onMove={moveSelectedToBoard}
           />
         )}
           </>

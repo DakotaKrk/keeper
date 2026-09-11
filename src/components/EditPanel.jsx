@@ -1,7 +1,7 @@
 import React from 'react';
 import { X, Upload, Trash2 } from 'lucide-react';
 
-export default function EditPanel({ node, onClose, onPatch, onDelete, onFiles }) {
+export default function EditPanel({ node, onClose, onPatch, onDelete, onFiles, parentId, parentOptions = [], onMove }) {
   if (!node) return null;
   const d = node.data;
 
@@ -16,6 +16,19 @@ export default function EditPanel({ node, onClose, onPatch, onDelete, onFiles })
       </div>
 
       <div className="edit-scroll">
+        {d.kind !== 'Root' && (
+          <label className="field">
+            <span>Board location</span>
+            <select value={parentId || ''} onChange={e => onMove?.(e.target.value)}>
+              {parentOptions.map(parent => (
+                <option key={parent.id} value={parent.id}>
+                  {parent.data.title}
+                </option>
+              ))}
+            </select>
+          </label>
+        )}
+
         <label className="field">
           <span>Title</span>
           <input value={d.title || ''} onChange={e => onPatch({ title: e.target.value })}/>
