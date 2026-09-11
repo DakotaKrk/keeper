@@ -302,14 +302,14 @@ button { cursor: pointer; }
 
 .detail-panel, .edit-panel {
   position: absolute; z-index: 30; top: 16px; right: 16px; bottom: 16px;
-  width: min(760px, calc(100vw - 132px)); overflow: hidden;
+  width: clamp(520px, 54vw, 900px); overflow: hidden;
   border: 1px solid rgba(37, 36, 31, .1); border-radius: 18px;
   background: rgba(255,255,253,.94);
   box-shadow: 0 30px 90px rgba(38,36,31,.16);
   backdrop-filter: blur(22px);
   animation: panelRise .26s ease both;
 }
-.edit-panel { right: min(792px, calc(100vw - 96px)); width: min(360px, calc(100vw - 118px)); }
+.edit-panel { right: min(932px, calc(100vw - 96px)); width: min(360px, calc(100vw - 118px)); }
 
 .detail-head, .edit-head {
   min-height: 78px; padding: 16px 18px; display: flex; align-items: flex-start;
@@ -320,12 +320,12 @@ button { cursor: pointer; }
 }
 .detail-head h2, .edit-head h3 { margin: 5px 0 0; font: 26px Georgia, serif; font-weight: 500; color: #292923; }
 
-.detail-scroll { height: calc(100% - 210px); overflow-y: auto; padding: 22px 26px 24px; }
+.detail-scroll { height: calc(100% - clamp(170px, 24vh, 260px)); overflow-y: auto; padding: clamp(18px, 2vw, 30px); }
 .edit-scroll { height: calc(100% - 78px); overflow-y: auto; padding: 18px; }
 
 .album-cover {
   position: relative;
-  height: 210px;
+  height: clamp(170px, 24vh, 260px);
   overflow: hidden;
   background:
     linear-gradient(rgba(36,35,31,.04) 1px, transparent 1px),
@@ -375,12 +375,14 @@ button { cursor: pointer; }
 .album-title-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 20px;
+  gap: clamp(14px, 2vw, 28px);
   align-items: start;
 }
 .album-title-row h2 {
   margin: 5px 0 0;
-  font: 32px Georgia, serif;
+  font-family: Georgia, serif;
+  font-size: clamp(27px, 2.5vw, 42px);
+  line-height: 1.08;
   color: #292923;
   font-weight: 500;
 }
@@ -440,9 +442,9 @@ button { cursor: pointer; }
 
 .album-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 210px;
-  gap: 20px;
-  margin-top: 20px;
+  grid-template-columns: minmax(0, 1fr) clamp(190px, 18vw, 260px);
+  gap: clamp(14px, 1.8vw, 26px);
+  margin-top: clamp(16px, 2vw, 24px);
   align-items: start;
 }
 .album-main { min-width: 0; }
@@ -548,8 +550,8 @@ button { cursor: pointer; }
 .photo-masonry {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  grid-auto-rows: 82px;
-  gap: 8px;
+  grid-auto-rows: clamp(66px, 7vw, 118px);
+  gap: clamp(6px, .7vw, 10px);
 }
 .masonry-photo {
   overflow: hidden;
@@ -741,9 +743,26 @@ button { cursor: pointer; }
 
 @media (max-width: 1000px) {
   .edit-panel { right: 14px; z-index: 40; }
-  .detail-panel { width: min(640px, calc(100vw - 116px)); }
+  .detail-panel { width: calc(100vw - 116px); }
   .album-layout { grid-template-columns: 1fr; }
   .album-aside { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 1180px) {
+  .detail-panel {
+    width: min(720px, calc(100vw - 116px));
+  }
+  .album-layout {
+    grid-template-columns: 1fr;
+  }
+  .album-aside {
+    grid-template-columns: repeat(4, minmax(150px, 1fr));
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+  .info-card {
+    min-width: 150px;
+  }
 }
 
 @media (max-width: 780px) {
@@ -759,6 +778,13 @@ button { cursor: pointer; }
   .detail-scroll { height: calc(100% - 160px); padding: 18px; }
   .album-cover { height: 160px; }
   .album-title-row { grid-template-columns: 1fr; }
+  .album-title-actions { width: 100%; }
+  .album-title-actions .primary { flex: 1; }
+  .album-tabs {
+    gap: 14px;
+    overflow-x: auto;
+    padding-bottom: 1px;
+  }
   .album-layout { grid-template-columns: 1fr; }
   .album-aside { grid-template-columns: 1fr; }
   .photo-masonry { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 118px; }
