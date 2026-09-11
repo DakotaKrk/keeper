@@ -11,7 +11,7 @@ import { clearKeeperState, readKeeperState, writeKeeperState } from './services/
 import { useKeeperSearch } from './hooks/useKeeperSearch';
 import { fileToDataUrl } from './utils/images';
 import { uid } from './utils/ids';
-import { edgeHandlesFor, layoutFocusedBoard, nextBranchPosition, resetBoardCamera } from './utils/treeLayout';
+import { edgeHandlesFor, layoutBoard, nextBranchPosition, resetBoardCamera } from './utils/treeLayout';
 
 export default function App() {
   const initial = readKeeperState();
@@ -34,6 +34,7 @@ export default function App() {
   const [nodeShape, setNodeShape] = useState('soft');
   const [coreSymbol, setCoreSymbol] = useState('leaf');
   const [coreColor, setCoreColor] = useState('dark');
+  const [boardLayoutMode, setBoardLayoutMode] = useState('tree');
   const [editOpen, setEditOpen] = useState(false);
   const [addMenuOpen, setAddMenuOpen] = useState(false);
   const [query, setQuery] = useState('');
@@ -70,10 +71,11 @@ export default function App() {
   }, [activeFolderId, childIds]);
 
   const visibleNodes = useMemo(
-    () => layoutFocusedBoard(
+    () => layoutBoard(
       nodes.filter(node => visibleIds.has(node.id)),
       childIds,
-      activeFolderId
+      activeFolderId,
+      boardLayoutMode
     ).map(node => ({
       ...node,
       data: {
@@ -83,11 +85,13 @@ export default function App() {
         coreColor
       }
     })),
-    [activeFolderId, childIds, coreColor, coreSymbol, nodes, visibleIds]
+    [activeFolderId, boardLayoutMode, childIds, coreColor, coreSymbol, nodes, visibleIds]
   );
 
   const visibleEdges = useMemo(
-    () => edges
+    () => boardLayoutMode === 'no-lines'
+      ? []
+      : edges
       .filter(edge => visibleIds.has(edge.source) && visibleIds.has(edge.target))
       .map(edge => {
         const source = visibleNodes.find(node => node.id === edge.source);
@@ -95,7 +99,7 @@ export default function App() {
         if (!source || !target) return edge;
         return { ...edge, ...edgeHandlesFor(source, target) };
       }),
-    [edges, visibleIds, visibleNodes]
+    [boardLayoutMode, edges, visibleIds, visibleNodes]
   );
 
   const canOpenSelected = !!selected && (childIds.get(selected.id) || []).length > 0;
@@ -406,7 +410,9 @@ export default function App() {
               coreSymbol,
               setCoreSymbol,
               coreColor,
-              setCoreColor
+              setCoreColor,
+              boardLayoutMode,
+              setBoardLayoutMode
             }}
           />
         ) : (

@@ -61,7 +61,42 @@ function resolveNodeCollisions(nodes, gapX = 270, gapY = 220) {
   return resolved;
 }
 
-export function layoutFocusedBoard(nodes, childIds, activeFolderId) {
+function layoutGridBoard(nodes, childIds, activeFolderId) {
+  const coreId = activeFolderId || 'life';
+  const core = nodes.find(node => node.id === coreId);
+  const children = (childIds.get(coreId) || [])
+    .map(id => nodes.find(node => node.id === id))
+    .filter(Boolean);
+
+  const gridColumns = activeFolderId ? 3 : 2;
+  const startX = activeFolderId ? 280 : 210;
+  const startY = activeFolderId ? 80 : -80;
+  const gapX = 330;
+  const gapY = 260;
+
+  return nodes.map(node => {
+    if (node.id === coreId && !node.data?.hasCustomPosition) {
+      return { ...node, position: { x: activeFolderId ? 690 : 650, y: activeFolderId ? 360 : 360 } };
+    }
+
+    const childIndex = children.findIndex(child => child.id === node.id);
+    if (childIndex >= 0 && !node.data?.hasCustomPosition) {
+      const column = childIndex % gridColumns;
+      const row = Math.floor(childIndex / gridColumns);
+      return {
+        ...node,
+        position: {
+          x: startX + column * gapX,
+          y: startY + row * gapY
+        }
+      };
+    }
+
+    return core && node.id !== coreId ? node : node;
+  });
+}
+
+function layoutTreeBoard(nodes, childIds, activeFolderId) {
   if (!activeFolderId) return resolveNodeCollisions(nodes);
 
   const center = { x: 690, y: 360 };
@@ -106,6 +141,12 @@ export function layoutFocusedBoard(nodes, childIds, activeFolderId) {
   });
 
   return resolveNodeCollisions(laidOut);
+}
+
+export function layoutBoard(nodes, childIds, activeFolderId, mode = 'tree') {
+  if (mode === 'custom') return nodes;
+  if (mode === 'grid') return resolveNodeCollisions(layoutGridBoard(nodes, childIds, activeFolderId));
+  return layoutTreeBoard(nodes, childIds, activeFolderId);
 }
 
 export function nextBranchPosition(parent, siblingCount) {

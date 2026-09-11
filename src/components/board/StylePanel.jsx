@@ -6,10 +6,31 @@ export default function StylePanel({
   coreSymbol,
   setCoreSymbol,
   coreColor,
-  setCoreColor
+  setCoreColor,
+  boardLayoutMode,
+  setBoardLayoutMode
 }) {
   return (
     <div className="style-panel">
+      <div>
+        <span>Board layout</span>
+        <div className="segmented-control board-layout-control">
+          {[
+            ['custom', 'Custom'],
+            ['tree', 'Tree'],
+            ['grid', 'Grid'],
+            ['no-lines', 'No lines']
+          ].map(([mode, label]) => (
+            <button
+              key={mode}
+              className={boardLayoutMode === mode ? 'is-active' : ''}
+              onClick={() => setBoardLayoutMode(mode)}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
       <div>
         <span>Core symbol</span>
         <div className="segmented-control">
