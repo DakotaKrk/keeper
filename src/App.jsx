@@ -20,7 +20,7 @@ import EditPanel from './components/EditPanel.jsx';
 
 const STORAGE_KEY = 'keeper-tree-v1';
 const LEGACY_STORAGE_KEY = 'minnesboard-tree-v1';
-const BRANCH_COLORS = ['green', 'gold', 'blue'];
+const BRANCH_COLORS = ['green', 'gold', 'blue', 'rose'];
 
 const ENGLISH_KIND = {
   Huvudnod: 'Root',
@@ -141,6 +141,8 @@ export default function App() {
   const [selectedId, setSelectedId] = useState('life');
   const [activeFolderId, setActiveFolderId] = useState(null);
   const [activeView, setActiveView] = useState('board');
+  const [branchTheme, setBranchTheme] = useState('tree');
+  const [nodeShape, setNodeShape] = useState('soft');
   const [editOpen, setEditOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [rf, setRf] = useState(null);
@@ -497,7 +499,7 @@ export default function App() {
   }
 
   return (
-    <div className="app-shell">
+    <div className={`app-shell branch-theme-${branchTheme} node-shape-${nodeShape}`}>
       <aside className="side-nav">
         <div className="nav-logo"><Leaf size={18}/></div>
         <nav>
@@ -588,6 +590,37 @@ export default function App() {
           <Panel position="top-left" className="canvas-hint">
             <Sparkles size={14}/>
             {activeFolder ? `Inside ${activeFolder.data.title}. Click a branch to change its color.` : 'Open a folder to grow its branches.'}
+          </Panel>
+
+          <Panel position="top-right" className="style-panel">
+            <div>
+              <span>Branch theme</span>
+              <div className="segmented-control">
+                {['tree', 'ink', 'warm'].map(theme => (
+                  <button
+                    key={theme}
+                    className={branchTheme === theme ? 'is-active' : ''}
+                    onClick={() => setBranchTheme(theme)}
+                  >
+                    {theme}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div>
+              <span>Card shape</span>
+              <div className="segmented-control">
+                {['soft', 'square', 'polaroid'].map(shape => (
+                  <button
+                    key={shape}
+                    className={nodeShape === shape ? 'is-active' : ''}
+                    onClick={() => setNodeShape(shape)}
+                  >
+                    {shape}
+                  </button>
+                ))}
+              </div>
+            </div>
           </Panel>
 
           {activeFolder && (

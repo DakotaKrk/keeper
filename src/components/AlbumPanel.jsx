@@ -1,7 +1,8 @@
-import React from 'react';
-import { Camera, FolderOpen, X, Pencil, Printer, ImagePlus, CalendarDays, MapPin, MoreHorizontal, Tags, UserRound } from 'lucide-react';
+import React, { useState } from 'react';
+import { Camera, FolderOpen, X, Pencil, Printer, ImagePlus, CalendarDays, MoreHorizontal, Tags, UserRound } from 'lucide-react';
 
 export default function AlbumPanel({ node, onClose, onEdit, onAddImages, onOpenFolder, canOpen, isOpen }) {
+  const [albumView, setAlbumView] = useState('grid');
   if (!node) return null;
   const d = node.data;
   const images = d.images || [];
@@ -16,6 +17,12 @@ export default function AlbumPanel({ node, onClose, onEdit, onAddImages, onOpenF
   };
   const tags = ['#keeper', '#memories', d.kind ? `#${d.kind.toLowerCase()}` : '#album'];
   const related = ['Winter 2024', 'Summer 2025'];
+  const captions = [
+    'The kind of day that stays.',
+    'Small moment, big feeling.',
+    'Worth keeping close.',
+    'A quiet frame from the story.'
+  ];
 
   return (
     <aside className="detail-panel">
@@ -32,7 +39,6 @@ export default function AlbumPanel({ node, onClose, onEdit, onAddImages, onOpenF
             <h2>{d.title}</h2>
             <div className="detail-meta">
               {!!images.length && <span>{images.length} images</span>}
-              {d.place && <span><MapPin size={14}/>{d.place}</span>}
               {d.date && <span><CalendarDays size={14}/>{d.date}</span>}
             </div>
             <p className="album-intro">{d.note || 'Add a story to this memory.'}</p>
@@ -63,6 +69,14 @@ export default function AlbumPanel({ node, onClose, onEdit, onAddImages, onOpenF
           <p>Sort originals, selects and export-ready files inside the same album.</p>
         </div>
 
+        <div className="album-view-switch">
+          <span>Album layout</span>
+          <div className="segmented-control">
+            <button className={albumView === 'grid' ? 'is-active' : ''} onClick={() => setAlbumView('grid')}>Grid</button>
+            <button className={albumView === 'polaroid' ? 'is-active' : ''} onClick={() => setAlbumView('polaroid')}>Polaroid</button>
+          </div>
+        </div>
+
         <div className="album-layout">
           <section className="album-main">
             {!images.length ? (
@@ -72,13 +86,14 @@ export default function AlbumPanel({ node, onClose, onEdit, onAddImages, onOpenF
                 <button onClick={onAddImages}>Add images</button>
               </div>
             ) : (
-              <div className="photo-masonry">
+              <div className={albumView === 'polaroid' ? 'polaroid-gallery' : 'photo-masonry'}>
                 {images.map((src, i) => (
-                  <div className={`masonry-photo p${i % 7}`} key={i}>
+                  <div className={albumView === 'polaroid' ? `polaroid-photo p${i % 4}` : `masonry-photo p${i % 7}`} key={i}>
                     <img src={src} alt="" />
+                    {albumView === 'polaroid' && <span>{captions[i % captions.length]}</span>}
                   </div>
                 ))}
-                <button className="masonry-photo add-photo-tile" onClick={onAddImages}>
+                <button className={albumView === 'polaroid' ? 'polaroid-photo add-photo-tile' : 'masonry-photo add-photo-tile'} onClick={onAddImages}>
                   <ImagePlus size={18}/>Add more
                 </button>
               </div>
