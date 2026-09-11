@@ -2,14 +2,11 @@
   "nodes": [
     {
       "id": "life",
-      "position": {
-        "x": 520,
-        "y": 300
-      },
+      "position": { "x": 650, "y": 360 },
       "data": {
-        "title": "My life",
+        "title": "My personal archive",
         "kind": "Root",
-        "note": "Every memory belongs somewhere.",
+        "note": "The heart of everything I want to keep.",
         "date": "",
         "place": "",
         "visibility": "private",
@@ -17,32 +14,39 @@
       }
     },
     {
-      "id": "family",
-      "position": {
-        "x": 520,
-        "y": 20
-      },
+      "id": "2023",
+      "position": { "x": 1030, "y": 20 },
       "data": {
-        "title": "Family",
-        "kind": "Collection",
-        "note": "The people I want to remember.",
-        "date": "",
+        "title": "2023",
+        "kind": "Year",
+        "note": "A year of memories.",
+        "date": "2023",
         "place": "",
-        "visibility": "shared",
+        "visibility": "private",
         "images": []
       }
     },
     {
-      "id": "grandma",
-      "position": {
-        "x": 120,
-        "y": 30
-      },
+      "id": "2024",
+      "position": { "x": 1090, "y": 190 },
       "data": {
-        "title": "The best years with grandma",
-        "kind": "Period",
-        "note": "Not perfect photos. Important memories.",
-        "date": "2018-2024",
+        "title": "2024",
+        "kind": "Year",
+        "note": "A year of memories.",
+        "date": "2024",
+        "place": "",
+        "visibility": "private",
+        "images": []
+      }
+    },
+    {
+      "id": "2025",
+      "position": { "x": 1090, "y": 530 },
+      "data": {
+        "title": "2025",
+        "kind": "Year",
+        "note": "A year of memories.",
+        "date": "2025",
         "place": "",
         "visibility": "private",
         "images": []
@@ -50,10 +54,7 @@
     },
     {
       "id": "2026",
-      "position": {
-        "x": 900,
-        "y": 60
-      },
+      "position": { "x": 1030, "y": 360 },
       "data": {
         "title": "2026",
         "kind": "Year",
@@ -65,47 +66,25 @@
       }
     },
     {
-      "id": "mountains",
-      "position": {
-        "x": 980,
-        "y": 320
-      },
+      "id": "2027",
+      "position": { "x": 1030, "y": 700 },
       "data": {
-        "title": "The mountains",
-        "kind": "Period",
-        "note": "Snow, quiet and time together.",
-        "date": "Jan 2026",
-        "place": "Aspen",
-        "visibility": "private",
-        "images": []
-      }
-    },
-    {
-      "id": "jan",
-      "position": {
-        "x": 900,
-        "y": 620
-      },
-      "data": {
-        "title": "January",
-        "kind": "Month",
-        "note": "Winter, daily life and small moments.",
-        "date": "2026-01",
+        "title": "2027",
+        "kind": "Year",
+        "note": "A year of memories.",
+        "date": "2027",
         "place": "",
         "visibility": "private",
         "images": []
       }
     },
     {
-      "id": "summer",
-      "position": {
-        "x": 160,
-        "y": 570
-      },
+      "id": "family",
+      "position": { "x": 230, "y": 130 },
       "data": {
-        "title": "Summer",
-        "kind": "Album",
-        "note": "Long days. Big memories.",
+        "title": "Family",
+        "kind": "Collection",
+        "note": "People, roots and inherited memories.",
         "date": "",
         "place": "",
         "visibility": "shared",
@@ -114,10 +93,7 @@
     },
     {
       "id": "travel",
-      "position": {
-        "x": 70,
-        "y": 320
-      },
+      "position": { "x": 180, "y": 360 },
       "data": {
         "title": "Travel",
         "kind": "Collection",
@@ -127,50 +103,71 @@
         "visibility": "shared",
         "images": []
       }
+    },
+    {
+      "id": "photo-job-1",
+      "position": { "x": 230, "y": 590 },
+      "data": {
+        "title": "Photo job 1",
+        "kind": "Collection",
+        "note": "A client archive ready to organize.",
+        "date": "",
+        "place": "",
+        "visibility": "private",
+        "images": []
+      }
+    },
+    {
+      "id": "jan",
+      "position": { "x": 1060, "y": 360 },
+      "data": {
+        "title": "January",
+        "kind": "Collection",
+        "note": "A month that can hold smaller albums.",
+        "date": "2026-01",
+        "place": "",
+        "visibility": "private",
+        "images": []
+      }
+    },
+    {
+      "id": "mountains",
+      "position": { "x": 320, "y": 360 },
+      "data": {
+        "title": "The mountains",
+        "kind": "Album",
+        "note": "Snow, quiet and time together.",
+        "date": "Jan 2026",
+        "place": "Aspen",
+        "visibility": "private",
+        "images": []
+      }
+    },
+    {
+      "id": "new-year-dinner",
+      "position": { "x": 690, "y": 90 },
+      "data": {
+        "title": "New year dinner",
+        "kind": "Album",
+        "note": "Small moments from the start of the year.",
+        "date": "2026-01-01",
+        "place": "",
+        "visibility": "private",
+        "images": []
+      }
     }
   ],
   "edges": [
-    {
-      "id": "e-life-family",
-      "source": "life",
-      "target": "family",
-      "branch": "green"
-    },
-    {
-      "id": "e-family-grandma",
-      "source": "family",
-      "target": "grandma",
-      "branch": "green"
-    },
-    {
-      "id": "e-life-2026",
-      "source": "life",
-      "target": "2026",
-      "branch": "gold"
-    },
-    {
-      "id": "e-2026-mountains",
-      "source": "2026",
-      "target": "mountains",
-      "branch": "gold"
-    },
-    {
-      "id": "e-2026-jan",
-      "source": "2026",
-      "target": "jan",
-      "branch": "blue"
-    },
-    {
-      "id": "e-life-summer",
-      "source": "life",
-      "target": "summer",
-      "branch": "green"
-    },
-    {
-      "id": "e-life-travel",
-      "source": "life",
-      "target": "travel",
-      "branch": "blue"
-    }
+    { "id": "e-life-2023", "source": "life", "target": "2023", "branch": "gold" },
+    { "id": "e-life-2024", "source": "life", "target": "2024", "branch": "gold" },
+    { "id": "e-life-2025", "source": "life", "target": "2025", "branch": "gold" },
+    { "id": "e-life-2026", "source": "life", "target": "2026", "branch": "gold" },
+    { "id": "e-life-2027", "source": "life", "target": "2027", "branch": "gold" },
+    { "id": "e-life-family", "source": "life", "target": "family", "branch": "green" },
+    { "id": "e-life-travel", "source": "life", "target": "travel", "branch": "blue" },
+    { "id": "e-life-photo-job-1", "source": "life", "target": "photo-job-1", "branch": "rose" },
+    { "id": "e-2026-jan", "source": "2026", "target": "jan", "branch": "blue" },
+    { "id": "e-2026-mountains", "source": "2026", "target": "mountains", "branch": "gold" },
+    { "id": "e-jan-new-year-dinner", "source": "jan", "target": "new-year-dinner", "branch": "green" }
   ]
 }

@@ -13,14 +13,54 @@ function translateLegacyData(data = {}) {
 }
 
 export function normalizeState(state) {
+  const existingIds = new Set((state.nodes || []).map(node => node.id));
+  const existingEdgeIds = new Set((state.edges || []).map(edge => edge.id));
+  const missingSeedNodes = seed.nodes.filter(node => !existingIds.has(node.id));
+  const missingSeedEdges = seed.edges.filter(edge => !existingEdgeIds.has(edge.id));
+
   return {
     ...state,
-    nodes: (state.nodes || []).map(node => ({
-      ...node,
-      position: DEMO_LAYOUT[node.id] || node.position,
-      data: translateLegacyData(node.data)
-    })),
-    edges: state.edges || []
+    nodes: [...(state.nodes || []), ...missingSeedNodes].map(node => {
+      let translatedData = translateLegacyData(node.data);
+      const shouldRefreshRoot = node.id === 'life' && translatedData.title === 'My life';
+
+      if (node.id === 'jan' && translatedData.kind === 'Month') {
+        translatedData = {
+          ...translatedData,
+          kind: 'Collection',
+          note: translatedData.note || 'A month that can hold smaller albums.'
+        };
+      }
+
+      if (node.id === 'mountains' && translatedData.kind === 'Period') {
+        translatedData = {
+          ...translatedData,
+          kind: 'Album'
+        };
+      }
+
+      return {
+        ...node,
+        position: DEMO_LAYOUT[node.id] || node.position,
+        data: shouldRefreshRoot
+          ? {
+              ...translatedData,
+              title: 'My personal archive',
+              note: 'The heart of everything I want to keep.'
+            }
+          : translatedData
+      };
+    }),
+    edges: [...(state.edges || []), ...missingSeedEdges].map(edge => {
+      if (edge.id === 'e-life-summer') {
+        return {
+          ...edge,
+          id: 'e-2026-summer',
+          source: '2026'
+        };
+      }
+      return edge;
+    })
   };
 }
 

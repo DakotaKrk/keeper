@@ -1,11 +1,16 @@
 export const DEMO_LAYOUT = {
   life: { x: 650, y: 360 },
-  family: { x: 640, y: 70 },
-  '2026': { x: 1080, y: 300 },
-  travel: { x: 230, y: 300 },
-  summer: { x: 640, y: 650 },
-  jan: { x: 640, y: 560 },
-  mountains: { x: 1030, y: 330 }
+  '2023': { x: 1030, y: 20 },
+  '2024': { x: 1090, y: 190 },
+  '2025': { x: 1090, y: 530 },
+  '2026': { x: 1030, y: 360 },
+  '2027': { x: 1030, y: 700 },
+  family: { x: 230, y: 130 },
+  travel: { x: 180, y: 360 },
+  'photo-job-1': { x: 230, y: 590 },
+  jan: { x: 1060, y: 360 },
+  mountains: { x: 320, y: 360 },
+  'new-year-dinner': { x: 690, y: 90 }
 };
 
 export function edgeHandlesFor(source, target) {
@@ -27,19 +32,26 @@ export function layoutFocusedBoard(nodes, childIds, activeFolderId) {
   if (!activeFolderId) return nodes;
 
   const center = { x: 690, y: 360 };
-  const childPositions = [
-    { x: 320, y: 360 },
-    { x: 1060, y: 360 },
-    { x: 690, y: 90 },
-    { x: 690, y: 640 },
-    { x: 260, y: 120 },
-    { x: 1080, y: 610 },
-    { x: 1080, y: 120 },
-    { x: 260, y: 610 },
-    { x: 160, y: 360 },
-    { x: 1180, y: 360 }
-  ];
   const directChildren = childIds.get(activeFolderId) || [];
+  const left = [
+    { x: 320, y: 250 },
+    { x: 280, y: 460 },
+    { x: 230, y: 90 },
+    { x: 230, y: 650 }
+  ];
+  const right = [
+    { x: 1060, y: 250 },
+    { x: 1100, y: 460 },
+    { x: 1120, y: 90 },
+    { x: 1120, y: 650 }
+  ];
+  const topBottom = [
+    { x: 690, y: 90 },
+    { x: 690, y: 640 }
+  ];
+  let leftIndex = 0;
+  let rightIndex = 0;
+  let otherIndex = 0;
 
   return nodes.map(node => {
     if (node.id === activeFolderId && !node.data?.hasCustomPosition) {
@@ -48,9 +60,16 @@ export function layoutFocusedBoard(nodes, childIds, activeFolderId) {
 
     const childIndex = directChildren.indexOf(node.id);
     if (childIndex >= 0 && !node.data?.hasCustomPosition) {
+      const kind = node.data?.kind;
+      const position = ['Album', 'Event', 'Period'].includes(kind)
+        ? left[leftIndex++ % left.length]
+        : ['Month', 'Collection', 'Year'].includes(kind)
+          ? right[rightIndex++ % right.length]
+          : topBottom[otherIndex++ % topBottom.length];
+
       return {
         ...node,
-        position: childPositions[childIndex % childPositions.length]
+        position
       };
     }
 
