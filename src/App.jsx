@@ -230,6 +230,7 @@ export default function App() {
         place: '',
         visibility: 'private',
         images: [],
+        cardColor: 'linen',
         isDraft: true
       }
     });
@@ -291,6 +292,7 @@ export default function App() {
         ...draftBranch.data,
         title: draftBranch.data.title?.trim() || `Untitled ${draftBranch.data.kind.toLowerCase()}`,
         images: [],
+        cardColor: draftBranch.data.cardColor || 'linen',
         isDraft: false
       }
     };

@@ -1,6 +1,15 @@
 import React from 'react';
 import { Folder, X, Upload, Trash2 } from 'lucide-react';
 
+const CARD_COLORS = [
+  { id: 'linen', label: 'Linen' },
+  { id: 'moss', label: 'Moss' },
+  { id: 'wine', label: 'Wine' },
+  { id: 'clay', label: 'Clay' },
+  { id: 'ochre', label: 'Ochre' },
+  { id: 'plum', label: 'Plum' }
+];
+
 export default function EditPanel({ node, onClose, onPatch, onDelete, onFiles, parentId, parentOptions = [], onMove, onCreate }) {
   if (!node) return null;
   const d = node.data;
@@ -80,6 +89,24 @@ export default function EditPanel({ node, onClose, onPatch, onDelete, onFiles, p
                 <option value="shared">Shared</option>
               </select>
             </label>
+          </div>
+
+          <div className="field">
+            <span>Card color</span>
+            <div className="color-palette" role="list">
+              {CARD_COLORS.map(color => (
+                <button
+                  key={color.id}
+                  type="button"
+                  className={`color-swatch color-${color.id} ${(d.cardColor || 'linen') === color.id ? 'is-active' : ''}`}
+                  onClick={() => onPatch({ cardColor: color.id })}
+                  aria-label={color.label}
+                  title={color.label}
+                >
+                  <span />
+                </button>
+              ))}
+            </div>
           </div>
         </section>
 

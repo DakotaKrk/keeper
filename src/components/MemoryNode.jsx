@@ -12,10 +12,11 @@ function MemoryNode({ data, selected }) {
   const cover = data.images?.[0];
   const isLife = data.kind === 'Root';
   const kindClass = `kind-${(data.kind || 'album').toLowerCase().replace(/\s+/g, '-')}`;
+  const colorClass = data.cardColor ? `card-color-${data.cardColor}` : '';
   const CoreSymbol = CORE_SYMBOLS[data.coreSymbol] || Leaf;
 
   return (
-    <div className={`memory-node ${kindClass} ${isLife ? 'life-node' : ''} ${data.isBoardCore ? `board-core-node core-color-${data.coreColor || 'dark'}` : ''} ${selected ? 'is-selected' : ''}`}>
+    <div className={`memory-node ${kindClass} ${colorClass} ${isLife ? 'life-node' : ''} ${data.isBoardCore ? `board-core-node core-color-${data.coreColor || 'dark'}` : ''} ${selected ? 'is-selected' : ''}`}>
       <Handle id="top" type="target" position={Position.Top} className="node-handle" />
       <Handle id="right" type="target" position={Position.Right} className="node-handle" />
       <Handle id="bottom" type="target" position={Position.Bottom} className="node-handle" />
