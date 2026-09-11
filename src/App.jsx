@@ -138,17 +138,21 @@ function layoutFocusedBoard(nodes, childIds, activeFolderId) {
     { x: 690, y: 90 },
     { x: 690, y: 640 },
     { x: 260, y: 120 },
-    { x: 1080, y: 610 }
+    { x: 1080, y: 610 },
+    { x: 1080, y: 120 },
+    { x: 260, y: 610 },
+    { x: 160, y: 360 },
+    { x: 1180, y: 360 }
   ];
   const directChildren = childIds.get(activeFolderId) || [];
 
   return nodes.map(node => {
-    if (node.id === activeFolderId) {
+    if (node.id === activeFolderId && !node.data?.hasCustomPosition) {
       return { ...node, position: center };
     }
 
     const childIndex = directChildren.indexOf(node.id);
-    if (childIndex >= 0) {
+    if (childIndex >= 0 && !node.data?.hasCustomPosition) {
       return {
         ...node,
         position: childPositions[childIndex % childPositions.length]
@@ -327,8 +331,18 @@ export default function App() {
     onNodesChange(changes);
     requestAnimationFrame(() => {
       setNodes(current => {
-        persist(current);
-        return current;
+        const movedIds = new Set(
+          changes
+            .filter(change => change.type === 'position' && change.dragging === false)
+            .map(change => change.id)
+        );
+        const next = movedIds.size
+          ? current.map(node => movedIds.has(node.id)
+            ? { ...node, data: { ...node.data, hasCustomPosition: true } }
+            : node)
+          : current;
+        persist(next);
+        return next;
       });
     });
   }, [onNodesChange, persist, setNodes]);
