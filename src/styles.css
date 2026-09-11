@@ -616,6 +616,21 @@ button { cursor: pointer; }
   font-size: 14px;
   line-height: 1.45;
 }
+.cover-open-folder {
+  min-height: 38px;
+  margin-top: 16px;
+  border: 0;
+  border-radius: 8px;
+  padding: 0 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(255,255,253,.92);
+  color: #24241f;
+  box-shadow: 0 10px 28px rgba(0,0,0,.16);
+  font-size: 12px;
+  font-weight: 750;
+}
 .album-back {
   position: absolute;
   z-index: 3;

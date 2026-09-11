@@ -74,6 +74,11 @@ export default function AlbumPanel({ node, onClose, onEdit, onAddImages, onOpenF
           <div className="detail-kicker">{d.kind}</div>
           <h2>{d.title}{d.date ? ` — ${d.date}` : ''}</h2>
           <p>{images.length ? `${images.length} images` : 'No images yet'}{d.note ? ` · ${d.note}` : ''}</p>
+          {canOpen && !isOpen && (
+            <button className="cover-open-folder" onClick={onOpenFolder}>
+              <FolderOpen size={15}/>Open folder
+            </button>
+          )}
         </div>
       </div>
 
