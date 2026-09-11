@@ -1384,7 +1384,7 @@ button { cursor: pointer; }
   display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 16px;
 }
 .detail-actions .span-action { grid-column: 1 / -1; }
-.detail-actions button, .upload-button, .delete-button {
+.detail-actions button, .upload-button, .delete-button, .done-button {
   min-height: 40px; border: 0; border-radius: 8px; display: flex; align-items: center;
   justify-content: center; gap: 7px; font-size: 12px; font-weight: 650;
 }
@@ -1392,6 +1392,18 @@ button { cursor: pointer; }
 .detail-actions .primary { background: #22231f; color: #fff; }
 
 .field { display: block; margin-bottom: 13px; }
+.edit-section {
+  margin-bottom: 16px;
+  padding-bottom: 3px;
+}
+.section-label {
+  margin-bottom: 10px;
+  color: #8a867e;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
 .field > span { display: block; margin-bottom: 6px; color: #6f6b63; font-size: 10px; font-weight: 750; }
 .field input, .field textarea, .field select {
   width: 100%; border: 1px solid rgba(37,36,31,.1); border-radius: 8px;
@@ -1406,6 +1418,12 @@ button { cursor: pointer; }
 .upload-button { background: #f0eee8; cursor: pointer; }
 .upload-button input { display: none; }
 .delete-button { width: 100%; margin-top: 10px; background: transparent; color: #8d433c; border: 1px solid rgba(141,67,60,.18); }
+.done-button {
+  width: 100%;
+  margin-top: 10px;
+  background: #22231f;
+  color: #fffefa;
+}
 .hidden-file { display: none; }
 
 .ambient-leaves { pointer-events: none; position: absolute; inset: 0; z-index: 2; overflow: hidden; }

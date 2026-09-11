@@ -405,7 +405,8 @@ export default function App() {
         date: '',
         place: '',
         visibility: 'private',
-        images: []
+        images: [],
+        isDraft: true
       }
     };
 
