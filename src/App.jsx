@@ -112,6 +112,21 @@ function OrganicEdge(props) {
   return <BaseEdge path={path} className={`organic-edge branch-${branch}`} />;
 }
 
+function edgeHandlesFor(source, target) {
+  const dx = target.position.x - source.position.x;
+  const dy = target.position.y - source.position.y;
+
+  if (Math.abs(dx) > Math.abs(dy)) {
+    return dx > 0
+      ? { sourceHandle: 'right', targetHandle: 'left' }
+      : { sourceHandle: 'left', targetHandle: 'right' };
+  }
+
+  return dy > 0
+    ? { sourceHandle: 'bottom', targetHandle: 'top' }
+    : { sourceHandle: 'top', targetHandle: 'bottom' };
+}
+
 async function fileToDataUrl(file, maxSize = 1700, quality = 0.84) {
   const src = await new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -195,8 +210,15 @@ export default function App() {
   );
 
   const visibleEdges = useMemo(
-    () => edges.filter(edge => visibleIds.has(edge.source) && visibleIds.has(edge.target)),
-    [edges, visibleIds]
+    () => edges
+      .filter(edge => visibleIds.has(edge.source) && visibleIds.has(edge.target))
+      .map(edge => {
+        const source = nodes.find(node => node.id === edge.source);
+        const target = nodes.find(node => node.id === edge.target);
+        if (!source || !target) return edge;
+        return { ...edge, ...edgeHandlesFor(source, target) };
+      }),
+    [edges, nodes, visibleIds]
   );
 
   const canOpenSelected = !!selected && (childIds.get(selected.id) || []).length > 0;

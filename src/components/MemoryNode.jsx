@@ -9,7 +9,10 @@ function MemoryNode({ data, selected }) {
 
   return (
     <div className={`memory-node ${kindClass} ${isLife ? 'life-node' : ''} ${selected ? 'is-selected' : ''}`}>
-      <Handle type="target" position={Position.Left} className="node-handle" />
+      <Handle id="top" type="target" position={Position.Top} className="node-handle" />
+      <Handle id="right" type="target" position={Position.Right} className="node-handle" />
+      <Handle id="bottom" type="target" position={Position.Bottom} className="node-handle" />
+      <Handle id="left" type="target" position={Position.Left} className="node-handle" />
 
       <div className="node-cover">
         {cover ? (
@@ -37,7 +40,10 @@ function MemoryNode({ data, selected }) {
         </div>
       </div>
 
-      <Handle type="source" position={Position.Right} className="node-handle" />
+      <Handle id="top" type="source" position={Position.Top} className="node-handle" />
+      <Handle id="right" type="source" position={Position.Right} className="node-handle" />
+      <Handle id="bottom" type="source" position={Position.Bottom} className="node-handle" />
+      <Handle id="left" type="source" position={Position.Left} className="node-handle" />
     </div>
   );
 }
