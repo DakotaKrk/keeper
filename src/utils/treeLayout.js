@@ -28,32 +28,61 @@ export function edgeHandlesFor(source, target) {
     : { sourceHandle: 'top', targetHandle: 'bottom' };
 }
 
+function spreadColumn(count, x, centerY = 360, gap = 260) {
+  return Array.from({ length: count }, (_, index) => ({
+    x,
+    y: centerY + (index - (count - 1) / 2) * gap
+  }));
+}
+
+function resolveNodeCollisions(nodes, gapX = 270, gapY = 220) {
+  const sorted = [...nodes].sort((a, b) => a.position.y - b.position.y || a.position.x - b.position.x);
+  const resolved = [];
+
+  sorted.forEach(node => {
+    let position = { ...node.position };
+    let moved = true;
+
+    while (moved) {
+      moved = false;
+      for (const placed of resolved) {
+        const tooCloseX = Math.abs(position.x - placed.position.x) < gapX;
+        const tooCloseY = Math.abs(position.y - placed.position.y) < gapY;
+        if (tooCloseX && tooCloseY) {
+          position = { ...position, y: placed.position.y + gapY };
+          moved = true;
+        }
+      }
+    }
+
+    resolved.push({ ...node, position });
+  });
+
+  return resolved;
+}
+
 export function layoutFocusedBoard(nodes, childIds, activeFolderId) {
-  if (!activeFolderId) return nodes;
+  if (!activeFolderId) return resolveNodeCollisions(nodes);
 
   const center = { x: 690, y: 360 };
   const directChildren = childIds.get(activeFolderId) || [];
-  const left = [
-    { x: 320, y: 250 },
-    { x: 280, y: 460 },
-    { x: 230, y: 90 },
-    { x: 230, y: 650 }
-  ];
-  const right = [
-    { x: 1060, y: 250 },
-    { x: 1100, y: 460 },
-    { x: 1120, y: 90 },
-    { x: 1120, y: 650 }
-  ];
-  const topBottom = [
-    { x: 690, y: 90 },
-    { x: 690, y: 640 }
-  ];
+  const leftChildren = directChildren.filter(id => {
+    const node = nodes.find(item => item.id === id);
+    return ['Album', 'Event', 'Period'].includes(node?.data?.kind);
+  });
+  const rightChildren = directChildren.filter(id => {
+    const node = nodes.find(item => item.id === id);
+    return ['Month', 'Collection', 'Year', 'Place'].includes(node?.data?.kind);
+  });
+  const otherChildren = directChildren.filter(id => !leftChildren.includes(id) && !rightChildren.includes(id));
+  const left = spreadColumn(leftChildren.length, 260);
+  const right = spreadColumn(rightChildren.length, 1120);
+  const topBottom = spreadColumn(otherChildren.length, 690, 360, 270);
   let leftIndex = 0;
   let rightIndex = 0;
   let otherIndex = 0;
 
-  return nodes.map(node => {
+  const laidOut = nodes.map(node => {
     if (node.id === activeFolderId && !node.data?.hasCustomPosition) {
       return { ...node, position: center };
     }
@@ -75,6 +104,8 @@ export function layoutFocusedBoard(nodes, childIds, activeFolderId) {
 
     return node;
   });
+
+  return resolveNodeCollisions(laidOut);
 }
 
 export function nextBranchPosition(parent, siblingCount) {
