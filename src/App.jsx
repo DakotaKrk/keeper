@@ -49,6 +49,16 @@ const ENGLISH_COPY = {
   Åre: 'Aspen'
 };
 
+const DEMO_LAYOUT = {
+  life: { x: 650, y: 360 },
+  family: { x: 640, y: 70 },
+  '2026': { x: 1080, y: 300 },
+  travel: { x: 230, y: 300 },
+  summer: { x: 640, y: 650 },
+  jan: { x: 640, y: 560 },
+  mountains: { x: 1030, y: 330 }
+};
+
 function translateLegacyData(data = {}) {
   return {
     ...data,
@@ -64,6 +74,7 @@ function normalizeState(state) {
     ...state,
     nodes: (state.nodes || []).map(node => ({
       ...node,
+      position: DEMO_LAYOUT[node.id] || node.position,
       data: translateLegacyData(node.data)
     })),
     edges: state.edges || []

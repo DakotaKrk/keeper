@@ -311,20 +311,17 @@ button { cursor: pointer; }
   filter: drop-shadow(0 1px 0 rgba(255,255,255,.88));
   stroke-dasharray: none;
   animation: branchGrow .8s ease both;
-  opacity: .78;
+  opacity: .62;
 }
-.is-root-board .organic-edge {
-  opacity: .34;
-  stroke-width: 2.1;
-}
+.is-root-board .organic-edge { opacity: .28; }
 .is-root-board .organic-edge:hover,
 .is-inside-folder .organic-edge {
-  opacity: .76;
+  opacity: .64;
 }
-.organic-edge.branch-green { stroke: #9ea78f; stroke-width: 3.2; }
-.organic-edge.branch-gold  { stroke: #b5a27d; stroke-width: 3; }
-.organic-edge.branch-blue  { stroke: #9aa9aa; stroke-width: 2.8; }
-.organic-edge.branch-rose  { stroke: #b79a93; stroke-width: 2.9; }
+.organic-edge.branch-green { stroke: #9ea78f; stroke-width: 2.25; }
+.organic-edge.branch-gold  { stroke: #b5a27d; stroke-width: 2.15; }
+.organic-edge.branch-blue  { stroke: #9aa9aa; stroke-width: 2.05; }
+.organic-edge.branch-rose  { stroke: #b79a93; stroke-width: 2.1; }
 .branch-theme-ink .organic-edge.branch-green,
 .branch-theme-ink .organic-edge.branch-gold,
 .branch-theme-ink .organic-edge.branch-blue,
