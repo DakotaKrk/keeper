@@ -164,7 +164,12 @@ export default function App() {
 
   const visibleIds = useMemo(() => {
     if (!activeFolderId) {
-      return new Set(['life', ...(childIds.get('life') || [])]);
+      const ids = new Set(['life']);
+      (childIds.get('life') || []).forEach(childId => {
+        ids.add(childId);
+        (childIds.get(childId) || []).forEach(grandChildId => ids.add(grandChildId));
+      });
+      return ids;
     }
 
     const ids = new Set([activeFolderId]);
