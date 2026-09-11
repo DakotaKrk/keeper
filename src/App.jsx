@@ -127,6 +127,37 @@ function edgeHandlesFor(source, target) {
     : { sourceHandle: 'top', targetHandle: 'bottom' };
 }
 
+function layoutFocusedBoard(nodes, childIds, activeFolderId) {
+  if (!activeFolderId) return nodes;
+
+  const center = { x: 690, y: 360 };
+  const childPositions = [
+    { x: 320, y: 360 },
+    { x: 1060, y: 360 },
+    { x: 690, y: 90 },
+    { x: 690, y: 640 },
+    { x: 260, y: 120 },
+    { x: 1080, y: 610 }
+  ];
+  const directChildren = childIds.get(activeFolderId) || [];
+
+  return nodes.map(node => {
+    if (node.id === activeFolderId) {
+      return { ...node, position: center };
+    }
+
+    const childIndex = directChildren.indexOf(node.id);
+    if (childIndex >= 0) {
+      return {
+        ...node,
+        position: childPositions[childIndex % childPositions.length]
+      };
+    }
+
+    return node;
+  });
+}
+
 async function fileToDataUrl(file, maxSize = 1700, quality = 0.84) {
   const src = await new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -205,20 +236,24 @@ export default function App() {
   }, [activeFolderId, childIds]);
 
   const visibleNodes = useMemo(
-    () => nodes.filter(node => visibleIds.has(node.id)),
-    [nodes, visibleIds]
+    () => layoutFocusedBoard(
+      nodes.filter(node => visibleIds.has(node.id)),
+      childIds,
+      activeFolderId
+    ),
+    [activeFolderId, childIds, nodes, visibleIds]
   );
 
   const visibleEdges = useMemo(
     () => edges
       .filter(edge => visibleIds.has(edge.source) && visibleIds.has(edge.target))
       .map(edge => {
-        const source = nodes.find(node => node.id === edge.source);
-        const target = nodes.find(node => node.id === edge.target);
+        const source = visibleNodes.find(node => node.id === edge.source);
+        const target = visibleNodes.find(node => node.id === edge.target);
         if (!source || !target) return edge;
         return { ...edge, ...edgeHandlesFor(source, target) };
       }),
-    [edges, nodes, visibleIds]
+    [edges, visibleIds, visibleNodes]
   );
 
   const canOpenSelected = !!selected && (childIds.get(selected.id) || []).length > 0;
