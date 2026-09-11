@@ -1422,6 +1422,20 @@ button { cursor: pointer; }
   border-color: #708275; box-shadow: 0 0 0 3px rgba(78,106,86,.09);
 }
 .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+.branch-preview-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: -2px;
+  padding: 10px 11px;
+  border: 1px solid rgba(37,36,31,.08);
+  border-radius: 8px;
+  background: rgba(240,238,232,.55);
+  color: #706c64;
+  font-size: 11px;
+  line-height: 1.35;
+}
+.branch-preview-note strong { color: #292923; font-weight: 750; }
 
 .upload-button { background: #f0eee8; cursor: pointer; }
 .upload-button input { display: none; }
