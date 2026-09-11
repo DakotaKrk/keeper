@@ -656,6 +656,7 @@ export default function App() {
           onOpenFolder={() => openFolder(selected?.id)}
           canOpen={canOpenSelected}
           isOpen={selected?.id === activeFolderId}
+          onPatch={patchSelected}
         />
 
         {selected && (

@@ -982,6 +982,7 @@ button { cursor: pointer; }
   border: 1px solid rgba(37,36,31,.08);
   border-radius: 8px;
   background: #ece7dc;
+  padding: 0;
 }
 .masonry-photo img {
   width: 100%;
@@ -1017,6 +1018,7 @@ button { cursor: pointer; }
   color: #4c4943;
   box-shadow: 0 16px 32px rgba(38,36,31,.11);
   transform: rotate(-.6deg);
+  text-align: left;
 }
 .album-experience .polaroid-photo {
   padding: 10px 10px 16px;
@@ -1049,6 +1051,72 @@ button { cursor: pointer; }
   border: 1px dashed rgba(37,36,31,.16);
   box-shadow: none;
 }
+.image-lightbox {
+  position: fixed;
+  z-index: 120;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(28,27,24,.46);
+  backdrop-filter: blur(14px);
+  animation: panelRise .18s ease both;
+}
+.lightbox-card {
+  width: min(760px, calc(100vw - 120px));
+  max-height: calc(100vh - 92px);
+  overflow: auto;
+  border-radius: 8px;
+  padding: 12px 12px 16px;
+  background: #fffefa;
+  box-shadow: 0 34px 90px rgba(0,0,0,.28);
+}
+.lightbox-card img {
+  width: 100%;
+  max-height: 62vh;
+  object-fit: contain;
+  display: block;
+  border-radius: 5px;
+  background: #eee8dc;
+}
+.lightbox-card label {
+  display: block;
+  margin-top: 12px;
+}
+.lightbox-card label span {
+  display: block;
+  margin-bottom: 7px;
+  color: #858177;
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.lightbox-card textarea {
+  width: 100%;
+  border: 1px solid rgba(37,36,31,.1);
+  border-radius: 7px;
+  padding: 11px 12px;
+  outline: 0;
+  resize: vertical;
+  background: #fbfaf6;
+  color: #4b4740;
+  font: 16px "Bradley Hand", "Comic Sans MS", "Segoe Print", Georgia, serif;
+  line-height: 1.45;
+}
+.lightbox-close {
+  position: fixed;
+  top: 22px;
+  right: 22px;
+  background: rgba(255,255,253,.86);
+}
+.lightbox-step {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255,255,253,.86);
+}
+.lightbox-step.prev { left: 22px; }
+.lightbox-step.next { right: 22px; }
 
 .album-aside {
   display: grid;
@@ -1296,6 +1364,14 @@ button { cursor: pointer; }
   .album-aside { grid-template-columns: 1fr; }
   .style-panel { display: none; }
   .polaroid-gallery { grid-template-columns: 1fr 1fr; }
+  .lightbox-card {
+    width: calc(100vw - 28px);
+  }
+  .lightbox-step {
+    top: auto;
+    bottom: 18px;
+    transform: none;
+  }
   .photo-masonry { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 118px; }
   .masonry-photo,
   .masonry-photo.p0,

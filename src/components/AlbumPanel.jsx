@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Camera, FolderOpen, X, Pencil, Printer, ImagePlus, CalendarDays, MoreHorizontal, Tags, UserRound } from 'lucide-react';
+import { ArrowLeft, Camera, ChevronLeft, ChevronRight, FolderOpen, X, Pencil, Printer, ImagePlus, CalendarDays, MoreHorizontal, Tags, UserRound } from 'lucide-react';
 
 const mountainDemoImages = [
   'https://images.unsplash.com/photo-1454496522488-7a8e488e8606?auto=format&fit=crop&w=1200&q=80',
@@ -12,9 +12,10 @@ const mountainDemoImages = [
   'https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=1200&q=80'
 ];
 
-export default function AlbumPanel({ node, onClose, onEdit, onAddImages, onOpenFolder, canOpen, isOpen }) {
+export default function AlbumPanel({ node, onClose, onEdit, onAddImages, onOpenFolder, canOpen, isOpen, onPatch }) {
   const [albumView, setAlbumView] = useState('polaroid');
   const [panelSize, setPanelSize] = useState('half');
+  const [activeImage, setActiveImage] = useState(null);
   if (!node) return null;
   const d = node.data;
   const ownImages = d.images || [];
@@ -39,6 +40,24 @@ export default function AlbumPanel({ node, onClose, onEdit, onAddImages, onOpenF
     'Same view. Different chapter.',
     'Good company.'
   ];
+  const memoryCaptions = d.captions || [];
+
+  function captionFor(index) {
+    return memoryCaptions[index] || captions[index % captions.length];
+  }
+
+  function updateCaption(index, value) {
+    const next = [...memoryCaptions];
+    next[index] = value;
+    onPatch?.({ captions: next });
+  }
+
+  function stepImage(direction) {
+    setActiveImage(current => {
+      if (current === null || !images.length) return current;
+      return (current + direction + images.length) % images.length;
+    });
+  }
 
   return (
     <aside className={`detail-panel album-experience album-size-${panelSize}`}>
@@ -114,10 +133,14 @@ export default function AlbumPanel({ node, onClose, onEdit, onAddImages, onOpenF
             ) : (
               <div className={albumView === 'polaroid' ? 'polaroid-gallery' : 'photo-masonry'}>
                 {images.map((src, i) => (
-                  <div className={albumView === 'polaroid' ? `polaroid-photo p${i % 4}` : `masonry-photo p${i % 7}`} key={i}>
+                  <button
+                    className={albumView === 'polaroid' ? `polaroid-photo p${i % 4}` : `masonry-photo p${i % 7}`}
+                    key={i}
+                    onClick={() => setActiveImage(i)}
+                  >
                     <img src={src} alt="" />
-                    {albumView === 'polaroid' && <span>{captions[i % captions.length]}</span>}
-                  </div>
+                    {albumView === 'polaroid' && <span>{captionFor(i)}</span>}
+                  </button>
                 ))}
                 <button className={albumView === 'polaroid' ? 'polaroid-photo add-photo-tile' : 'masonry-photo add-photo-tile'} onClick={onAddImages}>
                   <ImagePlus size={18}/>Add more
@@ -165,6 +188,26 @@ export default function AlbumPanel({ node, onClose, onEdit, onAddImages, onOpenF
           <button onClick={onEdit}><Pencil size={15}/>Edit</button>
           <button className="primary"><Printer size={15}/>Create print set</button>
         </div>
+
+        {activeImage !== null && images[activeImage] && (
+          <div className="image-lightbox" role="dialog" aria-modal="true">
+            <button className="icon-button lightbox-close" onClick={() => setActiveImage(null)}><X size={18}/></button>
+            <button className="icon-button lightbox-step prev" onClick={() => stepImage(-1)}><ChevronLeft size={20}/></button>
+            <div className="lightbox-card">
+              <img src={images[activeImage]} alt="" />
+              <label>
+                <span>Memory note</span>
+                <textarea
+                  rows="3"
+                  value={memoryCaptions[activeImage] || ''}
+                  placeholder={captionFor(activeImage)}
+                  onChange={e => updateCaption(activeImage, e.target.value)}
+                />
+              </label>
+            </div>
+            <button className="icon-button lightbox-step next" onClick={() => stepImage(1)}><ChevronRight size={20}/></button>
+          </div>
+        )}
       </div>
     </aside>
   );
