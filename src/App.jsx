@@ -170,6 +170,12 @@ function nextBranchPosition(parent, siblingCount) {
   };
 }
 
+function resetBoardCamera(rf) {
+  requestAnimationFrame(() => {
+    rf?.setViewport({ x: 260, y: 82, zoom: 0.76 }, { duration: 420 });
+  });
+}
+
 async function fileToDataUrl(file, maxSize = 1700, quality = 0.84) {
   const src = await new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -441,18 +447,14 @@ export default function App() {
     setActiveFolderId(id);
     setSelectedId(null);
     setEditOpen(false);
-    requestAnimationFrame(() => {
-      if (rf) {
-        rf.fitView({ nodes: nodes.filter(n => n.id === id || visibleIds.has(n.id)), duration: 450, padding: 0.28 });
-      }
-    });
+    resetBoardCamera(rf);
   }
 
   function closeFolder() {
     setActiveFolderId(null);
     setSelectedId(null);
     setEditOpen(false);
-    requestAnimationFrame(() => rf?.fitView({ duration: 450, padding: 0.24 }));
+    resetBoardCamera(rf);
   }
 
   async function addImages(files) {
@@ -517,7 +519,7 @@ export default function App() {
       setSelectedId(id);
     }
     setQuery('');
-    if (rf) {
+    if (rf && !(childIds.get(id) || []).length) {
       rf.setCenter(node.position.x + 120, node.position.y + 90, {
         zoom: 1.15,
         duration: 500
