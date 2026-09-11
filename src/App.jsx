@@ -21,6 +21,7 @@ import EditPanel from './components/EditPanel.jsx';
 const STORAGE_KEY = 'keeper-tree-v1';
 const LEGACY_STORAGE_KEY = 'minnesboard-tree-v1';
 const BRANCH_COLORS = ['green', 'gold', 'blue', 'rose'];
+const BRANCH_TYPES = ['Year', 'Month', 'Album', 'Event', 'Person', 'Collection'];
 
 const ENGLISH_KIND = {
   Huvudnod: 'Root',
@@ -158,6 +159,17 @@ function layoutFocusedBoard(nodes, childIds, activeFolderId) {
   });
 }
 
+function nextBranchPosition(parent, siblingCount) {
+  const angles = [-90, 0, 180, 90, -35, 35, 145, -145];
+  const angle = (angles[siblingCount % angles.length] * Math.PI) / 180;
+  const radius = siblingCount < 4 ? 360 : 470;
+
+  return {
+    x: (parent?.position?.x || 650) + Math.cos(angle) * radius,
+    y: (parent?.position?.y || 360) + Math.sin(angle) * radius
+  };
+}
+
 async function fileToDataUrl(file, maxSize = 1700, quality = 0.84) {
   const src = await new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -203,6 +215,7 @@ export default function App() {
   const [coreSymbol, setCoreSymbol] = useState('leaf');
   const [coreColor, setCoreColor] = useState('dark');
   const [editOpen, setEditOpen] = useState(false);
+  const [addMenuOpen, setAddMenuOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [rf, setRf] = useState(null);
   const fileRef = useRef(null);
@@ -332,14 +345,17 @@ export default function App() {
     });
   }
 
-  function addBranch() {
-    let position = { x: 620, y: 360 };
+  function addBranch(kind = 'Album') {
+    const parentId = selectedId || activeFolderId || 'life';
+    const parentNode = visibleNodes.find(n => n.id === parentId) || nodes.find(n => n.id === parentId);
+    const siblingCount = childIds.get(parentId)?.length || 0;
+    let position = nextBranchPosition(parentNode, siblingCount);
     if (rf) {
       const p = rf.screenToFlowPosition({
-        x: window.innerWidth * 0.52,
-        y: window.innerHeight * 0.48
+        x: window.innerWidth * 0.5,
+        y: window.innerHeight * 0.5
       });
-      position = { x: p.x - 115, y: p.y - 80 };
+      if (!parentNode) position = { x: p.x - 115, y: p.y - 80 };
     }
 
     const id = uid('branch');
@@ -348,8 +364,8 @@ export default function App() {
       type: 'memory',
       position,
       data: {
-        title: 'New branch',
-        kind: 'Album',
+        title: `New ${kind.toLowerCase()}`,
+        kind,
         note: '',
         date: '',
         place: '',
@@ -364,7 +380,6 @@ export default function App() {
       return next;
     });
 
-    const parentId = selectedId || activeFolderId || 'life';
     if (parentId) {
       setEdges(current => {
         const next = addEdge({
@@ -381,6 +396,7 @@ export default function App() {
 
     setSelectedId(id);
     setEditOpen(true);
+    setAddMenuOpen(false);
   }
 
   function openFolder(id = selectedId) {
@@ -639,9 +655,21 @@ export default function App() {
           <button className="icon-button" onClick={resetDemo} title="Reset demo">
             <RotateCcw size={16}/>
           </button>
-          <button className="primary-button" onClick={addBranch}>
-            <Plus size={17}/>Add branch
-          </button>
+          <div className="add-menu-wrap">
+            <button className="primary-button" onClick={() => setAddMenuOpen(open => !open)}>
+              <Plus size={17}/>Add branch
+            </button>
+            {addMenuOpen && (
+              <div className="add-menu">
+                {BRANCH_TYPES.map(kind => (
+                  <button key={kind} onClick={() => addBranch(kind)}>
+                    <span>{kind}</span>
+                    <small>{kind === 'Year' ? 'Main time group' : kind === 'Album' ? 'Photo collection' : 'Board branch'}</small>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </header>
 
