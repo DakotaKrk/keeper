@@ -1,5 +1,5 @@
 import React from 'react';
-import { FolderOpen, X, Pencil, Printer, ImagePlus, CalendarDays, MapPin, MoreHorizontal, Share2, Tags, UserRound } from 'lucide-react';
+import { Camera, FolderOpen, X, Pencil, Printer, ImagePlus, CalendarDays, MapPin, MoreHorizontal, Share2, Tags, UserRound } from 'lucide-react';
 
 export default function AlbumPanel({ node, onClose, onEdit, onAddImages, onOpenFolder, canOpen, isOpen }) {
   if (!node) return null;
@@ -7,6 +7,13 @@ export default function AlbumPanel({ node, onClose, onEdit, onAddImages, onOpenF
   const images = d.images || [];
   const cover = images[0];
   const gallery = images.slice(1);
+  const fileCounts = {
+    all: images.length,
+    jpg: images.length,
+    raw: Math.max(0, Math.round(images.length * 0.7)),
+    video: Math.max(0, Math.floor(images.length / 5)),
+    favorites: Math.min(images.length, Math.max(0, Math.ceil(images.length / 4)))
+  };
   const tags = ['#keeper', '#memories', d.kind ? `#${d.kind.toLowerCase()}` : '#album'];
   const related = ['Winter 2024', 'Summer 2025'];
 
@@ -41,6 +48,19 @@ export default function AlbumPanel({ node, onClose, onEdit, onAddImages, onOpenF
           <button><MapPin size={14}/>Map</button>
           <button><UserRound size={14}/>People</button>
           <button><Pencil size={14}/>Notes</button>
+        </div>
+
+        <div className="asset-tabs">
+          <button className="is-active">All <span>{fileCounts.all}</span></button>
+          <button>JPG <span>{fileCounts.jpg}</span></button>
+          <button>RAW <span>{fileCounts.raw}</span></button>
+          <button>Video <span>{fileCounts.video}</span></button>
+          <button>Favorites <span>{fileCounts.favorites}</span></button>
+        </div>
+
+        <div className="delivery-strip">
+          <span><Camera size={14}/>Client delivery</span>
+          <p>Sort originals, selects and export-ready files inside the same album.</p>
         </div>
 
         <div className="album-layout">
