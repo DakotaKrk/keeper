@@ -11,7 +11,7 @@ import {
   BaseEdge,
   getBezierPath
 } from '@xyflow/react';
-import { ArrowLeft, Album, Folder, Home, MapPin, Plus, RotateCcw, Search, Settings, Tags, UserRound, Leaf, Sparkles } from 'lucide-react';
+import { ArrowLeft, Album, Folder, Home, Plus, RotateCcw, Search, Settings, Tags, UserRound, Leaf, Sparkles } from 'lucide-react';
 
 import seed from './data/seed.json';
 import MemoryNode from './components/MemoryNode.jsx';
@@ -140,6 +140,7 @@ export default function App() {
 
   const [selectedId, setSelectedId] = useState('life');
   const [activeFolderId, setActiveFolderId] = useState(null);
+  const [activeView, setActiveView] = useState('board');
   const [editOpen, setEditOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [rf, setRf] = useState(null);
@@ -370,6 +371,7 @@ export default function App() {
   function focusNode(id) {
     const node = nodes.find(n => n.id === id);
     if (!node) return;
+    setActiveView('board');
     setSelectedId(id);
     if (!activeFolderId && id !== 'life' && (childIds.get(id) || []).length) {
       setActiveFolderId(id);
@@ -383,17 +385,137 @@ export default function App() {
     }
   }
 
+  const albumNodes = useMemo(
+    () => nodes.filter(n => ['Album', 'Year', 'Collection', 'Period'].includes(n.data.kind)),
+    [nodes]
+  );
+
+  const people = useMemo(() => ['Nathalie', 'Klara', 'Mom', 'Grandma', 'Friends'], []);
+  const tagsIndex = useMemo(() => ['family', 'winter', 'travel', 'client work', 'favorites', 'legacy'], []);
+
+  const navItems = [
+    { id: 'home', label: 'Home', icon: Home },
+    { id: 'board', label: 'Board', icon: Folder },
+    { id: 'albums', label: 'Albums', icon: Album },
+    { id: 'people', label: 'People', icon: UserRound },
+    { id: 'tags', label: 'Tags', icon: Tags }
+  ];
+
+  function renderViewShell() {
+    if (activeView === 'home') {
+      return (
+        <section className="view-shell">
+          <div className="view-head">
+            <span>Keeper Home</span>
+            <h1>Your memory archive, without the noise.</h1>
+            <p>Start from the board, open a folder, and let albums branch into stories, people and related collections.</p>
+          </div>
+          <div className="shell-grid">
+            <button className="shell-card is-wide" onClick={() => setActiveView('board')}>
+              <Folder size={18}/>
+              <strong>Open Board</strong>
+              <span>{visibleNodes.length} visible branches right now</span>
+            </button>
+            <button className="shell-card" onClick={() => setActiveView('albums')}>
+              <Album size={18}/>
+              <strong>Albums</strong>
+              <span>{albumNodes.length} collections</span>
+            </button>
+            <button className="shell-card" onClick={() => setActiveView('people')}>
+              <UserRound size={18}/>
+              <strong>People</strong>
+              <span>Find memories by who was there</span>
+            </button>
+            <button className="shell-card" onClick={() => setActiveView('tags')}>
+              <Tags size={18}/>
+              <strong>Tags</strong>
+              <span>Connect images across albums</span>
+            </button>
+          </div>
+        </section>
+      );
+    }
+
+    if (activeView === 'albums') {
+      return (
+        <section className="view-shell">
+          <div className="view-head">
+            <span>Albums</span>
+            <h1>Collections with room for series.</h1>
+            <p>Later, selected related albums can become a new main album. For now this gives us the clean overview.</p>
+          </div>
+          <div className="album-index">
+            {albumNodes.map(node => (
+              <button key={node.id} className="album-index-item" onClick={() => focusNode(node.id)}>
+                <div>
+                  {node.data.images?.[0] ? <img src={node.data.images[0]} alt="" /> : <Folder size={20}/>}
+                </div>
+                <strong>{node.data.title}</strong>
+                <span>{node.data.kind}{node.data.date ? ` · ${node.data.date}` : ''}</span>
+              </button>
+            ))}
+          </div>
+        </section>
+      );
+    }
+
+    if (activeView === 'people') {
+      return (
+        <section className="view-shell">
+          <div className="view-head">
+            <span>People</span>
+            <h1>Faces become a way back in.</h1>
+            <p>People stays in the MVP because it helps memories feel human, not just organized.</p>
+          </div>
+          <div className="people-index">
+            {people.map(person => (
+              <button key={person} className="person-index-item">
+                <span>{person[0]}</span>
+                <strong>{person}</strong>
+                <small>Connected memories</small>
+              </button>
+            ))}
+          </div>
+        </section>
+      );
+    }
+
+    return (
+      <section className="view-shell">
+        <div className="view-head">
+          <span>Tags</span>
+          <h1>Soft structure across albums.</h1>
+          <p>Tags help you find all images from a theme, person, client delivery, or inherited archive.</p>
+        </div>
+        <div className="tag-index">
+          {tagsIndex.map(tag => (
+            <button key={tag}>#{tag}</button>
+          ))}
+        </div>
+      </section>
+    );
+  }
+
   return (
     <div className="app-shell">
       <aside className="side-nav">
         <div className="nav-logo"><Leaf size={18}/></div>
         <nav>
-          <button className="nav-item"><Home size={18}/><span>Home</span></button>
-          <button className="nav-item is-active"><Folder size={18}/><span>Board</span></button>
-          <button className="nav-item"><Album size={18}/><span>Albums</span></button>
-          <button className="nav-item"><UserRound size={18}/><span>People</span></button>
-          <button className="nav-item"><MapPin size={18}/><span>Places</span></button>
-          <button className="nav-item"><Tags size={18}/><span>Tags</span></button>
+          {navItems.map(item => {
+            const Icon = item.icon;
+            return (
+              <button
+                key={item.id}
+                className={`nav-item ${activeView === item.id ? 'is-active' : ''}`}
+                onClick={() => {
+                  setActiveView(item.id);
+                  setEditOpen(false);
+                }}
+              >
+                <Icon size={18}/><span>{item.label}</span>
+              </button>
+            );
+          })}
         </nav>
         <button className="nav-item nav-settings"><Settings size={18}/><span>Settings</span></button>
       </aside>
@@ -411,7 +533,7 @@ export default function App() {
           <input
             value={query}
             onChange={e => setQuery(e.target.value)}
-            placeholder="Search memories, people, places..."
+            placeholder="Search memories, people, tags..."
           />
           {!!matches.length && (
             <div className="search-results">
@@ -436,7 +558,9 @@ export default function App() {
       </header>
 
       <main className="workspace">
-        <ReactFlow
+        {activeView === 'board' ? (
+          <>
+          <ReactFlow
           nodes={visibleNodes}
           edges={visibleEdges}
           onNodesChange={onNodesChangePersisted}
@@ -516,6 +640,8 @@ export default function App() {
             onFiles={addImages}
           />
         )}
+          </>
+        ) : renderViewShell()}
       </main>
     </div>
   );
