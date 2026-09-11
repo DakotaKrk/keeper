@@ -1,11 +1,24 @@
 import React, { useState } from 'react';
-import { Camera, FolderOpen, X, Pencil, Printer, ImagePlus, CalendarDays, MoreHorizontal, Tags, UserRound } from 'lucide-react';
+import { ArrowLeft, Camera, FolderOpen, X, Pencil, Printer, ImagePlus, CalendarDays, MoreHorizontal, Tags, UserRound } from 'lucide-react';
+
+const mountainDemoImages = [
+  'https://images.unsplash.com/photo-1454496522488-7a8e488e8606?auto=format&fit=crop&w=1200&q=80',
+  'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=80',
+  'https://images.unsplash.com/photo-1483921020237-2ff51e8e4b22?auto=format&fit=crop&w=1200&q=80',
+  'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80',
+  'https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?auto=format&fit=crop&w=1200&q=80',
+  'https://images.unsplash.com/photo-1520763185298-1b434c919102?auto=format&fit=crop&w=1200&q=80',
+  'https://images.unsplash.com/photo-1491555103944-7c647fd857e6?auto=format&fit=crop&w=1200&q=80',
+  'https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=1200&q=80'
+];
 
 export default function AlbumPanel({ node, onClose, onEdit, onAddImages, onOpenFolder, canOpen, isOpen }) {
-  const [albumView, setAlbumView] = useState('grid');
+  const [albumView, setAlbumView] = useState('polaroid');
   if (!node) return null;
   const d = node.data;
-  const images = d.images || [];
+  const ownImages = d.images || [];
+  const isMountainDemo = d.title?.toLowerCase().includes('mountain');
+  const images = ownImages.length ? ownImages : (isMountainDemo ? mountainDemoImages : []);
   const cover = images[0];
   const gallery = images.slice(1);
   const fileCounts = {
@@ -18,18 +31,26 @@ export default function AlbumPanel({ node, onClose, onEdit, onAddImages, onOpenF
   const tags = ['#keeper', '#memories', d.kind ? `#${d.kind.toLowerCase()}` : '#album'];
   const related = ['Winter 2024', 'Summer 2025'];
   const captions = [
-    'The kind of day that stays.',
-    'Small moment, big feeling.',
-    'Worth keeping close.',
-    'A quiet frame from the story.'
+    'Our little cabin in the clouds.',
+    'Further than we thought.',
+    'Cold nose. Warm heart.',
+    'Stillness hits different up here.',
+    'Same view. Different chapter.',
+    'Good company.'
   ];
 
   return (
-    <aside className="detail-panel">
+    <aside className="detail-panel album-experience">
       <div className={`album-cover ${cover ? 'has-cover' : ''}`}>
         {cover && <img src={cover} alt="" />}
+        <button className="album-back" onClick={onClose}><ArrowLeft size={15}/>Back to board</button>
         <button className="icon-button album-close" onClick={onClose}><X size={18}/></button>
         <button className="cover-edit"><Pencil size={13}/>Edit cover</button>
+        <div className="album-cover-title">
+          <div className="detail-kicker">{d.kind}</div>
+          <h2>{d.title}{d.date ? ` — ${d.date}` : ''}</h2>
+          <p>{images.length ? `${images.length} images` : 'No images yet'}{d.note ? ` · ${d.note}` : ''}</p>
+        </div>
       </div>
 
       <div className="detail-scroll">

@@ -531,6 +531,13 @@ button { cursor: pointer; }
   backdrop-filter: blur(22px);
   animation: panelRise .26s ease both;
 }
+.detail-panel.album-experience {
+  left: clamp(18px, 2vw, 28px);
+  right: clamp(18px, 2vw, 28px);
+  width: auto;
+  border-radius: 14px;
+  background: rgba(255,255,253,.97);
+}
 .edit-panel { right: min(932px, calc(100vw - 96px)); width: min(360px, calc(100vw - 118px)); }
 
 .detail-head, .edit-head {
@@ -555,6 +562,9 @@ button { cursor: pointer; }
     linear-gradient(135deg, #f5f1e8, #e7e0d3);
   background-size: 22px 22px, 22px 22px, auto;
 }
+.album-experience .album-cover {
+  height: clamp(230px, 34vh, 360px);
+}
 .album-cover::after {
   content: "";
   position: absolute;
@@ -564,11 +574,59 @@ button { cursor: pointer; }
   height: 72px;
   background: linear-gradient(180deg, transparent, rgba(255,255,253,.96));
 }
+.album-experience .album-cover::after {
+  height: 56%;
+  background: linear-gradient(180deg, rgba(20,20,18,.08), rgba(20,20,18,.28) 48%, rgba(255,255,253,.98));
+}
 .album-cover img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
+}
+.album-cover-title {
+  position: absolute;
+  z-index: 2;
+  left: clamp(26px, 3vw, 48px);
+  right: clamp(140px, 14vw, 240px);
+  bottom: 28px;
+  color: #fffefa;
+  text-shadow: 0 2px 18px rgba(0,0,0,.36);
+}
+.album-cover-title .detail-kicker {
+  color: rgba(255,255,253,.72);
+}
+.album-cover-title h2 {
+  margin: 8px 0 0;
+  font-family: Georgia, serif;
+  font-size: clamp(34px, 4vw, 62px);
+  font-weight: 500;
+  line-height: 1.02;
+}
+.album-cover-title p {
+  max-width: 620px;
+  margin: 12px 0 0;
+  color: rgba(255,255,253,.88);
+  font-size: 14px;
+  line-height: 1.45;
+}
+.album-back {
+  position: absolute;
+  z-index: 3;
+  left: 18px;
+  top: 18px;
+  min-height: 34px;
+  border: 0;
+  border-radius: 8px;
+  padding: 0 11px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(255,255,253,.78);
+  color: #2d2c27;
+  backdrop-filter: blur(12px);
+  font-size: 12px;
+  font-weight: 650;
 }
 .album-close {
   position: absolute;
@@ -576,6 +634,28 @@ button { cursor: pointer; }
   right: 16px;
   top: 16px;
   background: rgba(255,255,253,.7);
+}
+.album-experience .detail-scroll {
+  height: calc(100% - clamp(230px, 34vh, 360px));
+  padding: clamp(20px, 2.4vw, 36px);
+}
+.album-experience .album-title-row {
+  display: none;
+}
+.album-experience .album-layout {
+  grid-template-columns: minmax(0, 1fr) clamp(240px, 22vw, 340px);
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.album-experience .album-tabs,
+.album-experience .asset-tabs,
+.album-experience .delivery-strip,
+.album-experience .album-view-switch,
+.album-experience .detail-actions {
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
 }
 .cover-edit {
   position: absolute;
@@ -873,9 +953,12 @@ button { cursor: pointer; }
 .masonry-photo.p6 { grid-column: span 1; grid-row: span 2; }
 .polaroid-gallery {
   display: grid;
-  grid-template-columns: repeat(3, minmax(130px, 1fr));
+  grid-template-columns: repeat(3, minmax(150px, 1fr));
   gap: clamp(12px, 1.3vw, 18px);
   align-items: start;
+}
+.album-experience .polaroid-gallery {
+  grid-template-columns: repeat(4, minmax(150px, 1fr));
 }
 .polaroid-photo {
   border: 0;
@@ -886,6 +969,9 @@ button { cursor: pointer; }
   color: #4c4943;
   box-shadow: 0 16px 32px rgba(38,36,31,.11);
   transform: rotate(-.6deg);
+}
+.album-experience .polaroid-photo {
+  padding: 10px 10px 16px;
 }
 .polaroid-photo.p1,
 .polaroid-photo.p3 {
@@ -904,7 +990,7 @@ button { cursor: pointer; }
   min-height: 34px;
   margin-top: 10px;
   color: #5d594f;
-  font: 13px Georgia, serif;
+  font: 14px "Bradley Hand", "Comic Sans MS", "Segoe Print", Georgia, serif;
   line-height: 1.25;
 }
 .polaroid-photo.add-photo-tile {
