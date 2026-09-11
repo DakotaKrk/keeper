@@ -61,15 +61,7 @@ export default function App() {
       return new Set(['life', ...(childIds.get('life') || [])]);
     }
 
-    const ids = new Set([activeFolderId]);
-    const visit = (id) => {
-      (childIds.get(id) || []).forEach(childId => {
-        ids.add(childId);
-        visit(childId);
-      });
-    };
-    visit(activeFolderId);
-    return ids;
+    return new Set([activeFolderId, ...(childIds.get(activeFolderId) || [])]);
   }, [activeFolderId, childIds]);
 
   const visibleNodes = useMemo(
@@ -246,12 +238,42 @@ export default function App() {
     setAddMenuOpen(false);
   }
 
+  function availableBranchPosition(parentNode, siblingCount) {
+    const center = parentNode?.position || { x: 650, y: 360 };
+    const offsets = [
+      { x: 0, y: -330 },
+      { x: 360, y: 0 },
+      { x: -360, y: 0 },
+      { x: 0, y: 330 },
+      { x: 360, y: -260 },
+      { x: 360, y: 260 },
+      { x: -360, y: -260 },
+      { x: -360, y: 260 },
+      { x: 720, y: 0 },
+      { x: -720, y: 0 },
+      { x: 0, y: -660 },
+      { x: 0, y: 660 }
+    ];
+    const occupied = visibleNodes.map(node => node.position);
+    const isOpen = position => occupied.every(existing =>
+      Math.abs(existing.x - position.x) >= 280 || Math.abs(existing.y - position.y) >= 230
+    );
+
+    for (let i = 0; i < offsets.length; i += 1) {
+      const offset = offsets[(siblingCount + i) % offsets.length];
+      const position = { x: center.x + offset.x, y: center.y + offset.y };
+      if (isOpen(position)) return position;
+    }
+
+    return nextBranchPosition(parentNode, siblingCount);
+  }
+
   function createDraftBranch() {
     if (!draftBranch) return;
     const parentId = draftBranch.parentId || activeFolderId || 'life';
     const parentNode = visibleNodes.find(n => n.id === parentId) || nodes.find(n => n.id === parentId);
     const siblingCount = childIds.get(parentId)?.length || 0;
-    let position = nextBranchPosition(parentNode, siblingCount);
+    let position = availableBranchPosition(parentNode, siblingCount);
     if (rf) {
       const p = rf.screenToFlowPosition({
         x: window.innerWidth * 0.5,
