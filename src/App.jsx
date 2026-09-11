@@ -308,7 +308,7 @@ export default function App() {
     const node = nodes.find(n => n.id === id);
     if (!node) return;
     setActiveFolderId(id);
-    setSelectedId(id);
+    setSelectedId(null);
     setEditOpen(false);
     requestAnimationFrame(() => {
       if (rf) {
@@ -380,9 +380,10 @@ export default function App() {
     const node = nodes.find(n => n.id === id);
     if (!node) return;
     setActiveView('board');
-    setSelectedId(id);
-    if (!activeFolderId && id !== 'life' && (childIds.get(id) || []).length) {
-      setActiveFolderId(id);
+    if ((childIds.get(id) || []).length) {
+      openFolder(id);
+    } else {
+      setSelectedId(id);
     }
     setQuery('');
     if (rf) {
@@ -505,7 +506,7 @@ export default function App() {
   }
 
   return (
-    <div className={`app-shell branch-theme-${branchTheme} node-shape-${nodeShape}`}>
+    <div className={`app-shell branch-theme-${branchTheme} node-shape-${nodeShape} ${activeFolder ? 'is-inside-folder' : 'is-root-board'}`}>
       <aside className="side-nav">
         <div className="nav-logo"><Leaf size={18}/></div>
         <nav>
@@ -576,6 +577,10 @@ export default function App() {
           onConnect={onConnect}
           onEdgeClick={onEdgeClick}
           onNodeClick={(_, node) => {
+            if ((childIds.get(node.id) || []).length) {
+              openFolder(node.id);
+              return;
+            }
             setSelectedId(node.id);
             setEditOpen(false);
           }}
@@ -595,7 +600,7 @@ export default function App() {
 
           <Panel position="top-left" className="canvas-hint">
             <Sparkles size={14}/>
-            {activeFolder ? `Inside ${activeFolder.data.title}. Click a branch to change its color.` : 'Open a folder to grow its branches.'}
+            {activeFolder ? `Inside ${activeFolder.data.title}. Click an album to open it.` : 'My board. Click a folder to open its board.'}
           </Panel>
 
           <Panel position="top-right" className="style-panel">
