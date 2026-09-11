@@ -164,12 +164,7 @@ export default function App() {
 
   const visibleIds = useMemo(() => {
     if (!activeFolderId) {
-      const ids = new Set(['life']);
-      (childIds.get('life') || []).forEach(childId => {
-        ids.add(childId);
-        (childIds.get(childId) || []).forEach(grandChildId => ids.add(grandChildId));
-      });
-      return ids;
+      return new Set(['life', ...(childIds.get('life') || [])]);
     }
 
     const ids = new Set([activeFolderId]);
@@ -194,6 +189,12 @@ export default function App() {
   );
 
   const canOpenSelected = !!selected && (childIds.get(selected.id) || []).length > 0;
+  const selectedChildren = useMemo(
+    () => (childIds.get(selectedId) || [])
+      .map(id => nodes.find(node => node.id === id))
+      .filter(Boolean),
+    [childIds, nodes, selectedId]
+  );
 
   const persist = useCallback((nextNodes, nextEdges = edges) => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({
@@ -657,6 +658,7 @@ export default function App() {
           canOpen={canOpenSelected}
           isOpen={selected?.id === activeFolderId}
           onPatch={patchSelected}
+          children={selectedChildren}
         />
 
         {selected && (

@@ -12,7 +12,7 @@ const mountainDemoImages = [
   'https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=1200&q=80'
 ];
 
-export default function AlbumPanel({ node, onClose, onEdit, onAddImages, onOpenFolder, canOpen, isOpen, onPatch }) {
+export default function AlbumPanel({ node, onClose, onEdit, onAddImages, onOpenFolder, canOpen, isOpen, onPatch, children = [] }) {
   const [albumView, setAlbumView] = useState('polaroid');
   const [panelSize, setPanelSize] = useState('half');
   const [activeImage, setActiveImage] = useState(null);
@@ -150,6 +150,21 @@ export default function AlbumPanel({ node, onClose, onEdit, onAddImages, onOpenF
           </section>
 
           <aside className="album-aside">
+            {!!children.length && (
+              <div className="info-card contains-card">
+                <strong><FolderOpen size={14}/>Contains</strong>
+                <div className="contains-list">
+                  {children.map(child => (
+                    <div key={child.id}>
+                      <span>{child.data.title}</span>
+                      <small>{child.data.kind}{child.data.date ? ` · ${child.data.date}` : ''}</small>
+                    </div>
+                  ))}
+                </div>
+                {canOpen && !isOpen && <button onClick={onOpenFolder}>Open folder</button>}
+              </div>
+            )}
+
             <div className="info-card">
               <strong><Tags size={14}/>Tags</strong>
               <div className="tag-list">
@@ -180,7 +195,7 @@ export default function AlbumPanel({ node, onClose, onEdit, onAddImages, onOpenF
         </div>
 
         <div className="detail-actions">
-          {canOpen && !isOpen && (
+          {canOpen && !isOpen && !children.length && (
             <button className="primary span-action" onClick={onOpenFolder}>
               <FolderOpen size={15}/>Open folder
             </button>

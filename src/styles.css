@@ -1137,6 +1137,43 @@ button { cursor: pointer; }
   color: #33322d;
   font-size: 12px;
 }
+.contains-card {
+  background: linear-gradient(180deg, #fffefa, #f5f2ea);
+}
+.contains-list {
+  display: grid;
+  gap: 7px;
+}
+.contains-list div {
+  min-height: 46px;
+  border: 1px solid rgba(37,36,31,.08);
+  border-radius: 8px;
+  padding: 9px 10px;
+  display: grid;
+  align-content: center;
+  background: rgba(255,255,253,.66);
+}
+.contains-list span {
+  color: #33322d;
+  font-size: 12px;
+  font-weight: 650;
+}
+.contains-list small {
+  margin-top: 3px;
+  color: #817d74;
+  font-size: 10.5px;
+}
+.contains-card > button {
+  width: 100%;
+  min-height: 34px;
+  margin-top: 10px;
+  border: 0;
+  border-radius: 8px;
+  background: #22231f;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 650;
+}
 .mini-map {
   height: 62px;
   border-radius: 9px;
