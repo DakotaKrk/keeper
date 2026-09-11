@@ -133,4 +133,5 @@ export function writeKeeperState(nodes, edges) {
 
 export function clearKeeperState() {
   localStorage.removeItem(STORAGE_KEY);
+  localStorage.removeItem(LEGACY_STORAGE_KEY);
 }

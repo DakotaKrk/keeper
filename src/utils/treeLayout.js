@@ -1,16 +1,8 @@
 export const DEMO_LAYOUT = {
   life: { x: 650, y: 360 },
-  '2023': { x: 1040, y: -180 },
-  '2024': { x: 1120, y: 90 },
-  '2025': { x: 1120, y: 630 },
-  '2026': { x: 1040, y: 360 },
-  '2027': { x: 1040, y: 900 },
-  family: { x: 220, y: -40 },
-  travel: { x: 160, y: 360 },
-  'photo-job-1': { x: 220, y: 760 },
-  jan: { x: 1060, y: 360 },
-  mountains: { x: 320, y: 360 },
-  'new-year-dinner': { x: 690, y: 90 }
+  '2026': { x: 1040, y: 230 },
+  wedding: { x: 260, y: 490 },
+  'mountain-trip-january': { x: 1040, y: 360 }
 };
 
 export function edgeHandlesFor(source, target) {
